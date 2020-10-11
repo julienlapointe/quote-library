@@ -4,6 +4,7 @@ package ui;
 import model.Library;
 import model.Quote;
 import java.util.Scanner;
+import static java.lang.System.out;
 
 // Represents the UI for the Quote and Library classes in the "model" package
 public class QuoteLibrary {
@@ -20,8 +21,8 @@ public class QuoteLibrary {
 
     // EFFECTS: User menu is printed, user input is captured, and corresponding method is called
     void runApp() {
-        System.out.println("Welcome to Quoterrific");
-        System.out.println("======================");
+        out.println("Welcome to Quoterrific");
+        out.println("======================");
         String s0 = "Please select an option:";
         String s1 = "1. View all quotes in library";
         String s2 = "2. Add a quote";
@@ -38,94 +39,124 @@ public class QuoteLibrary {
             // Issue w/ Scanner.nextInt method not reading newline character when user hits "ENTER"
             // Source: https://bit.ly/3iR4p4C
             in.nextLine();
-            returnIfInvalidInput(userInput);
+            checkIfValid(userInput, 7);
 
             if (userInput == 1) {
-                System.out.println("ENTERED 1");
-                System.out.println(library.viewAllQuotes());
+                out.println("ENTERED 1");
+                out.println(library.viewAllQuotes());
             } else if (userInput == 2) {
-                System.out.println("ENTERED 2");
+                out.println("ENTERED 2");
                 addQuote();
             } else if (userInput == 3) {
-                System.out.println("ENTERED 3");
+                out.println("ENTERED 3");
                 removeQuote();
             } else if (userInput == 4) {
-                System.out.println("ENTERED 4");
+                out.println("ENTERED 4");
                 editQuote();
             } else if (userInput == 5) {
-                System.out.println("ENTERED 5");
+                out.println("ENTERED 5");
             } else if (userInput == 6) {
-                System.out.println("ENTERED 6");
+                out.println("ENTERED 6");
             }
         } while (userInput != 7);
     }
 
-    // EFFECTS: an array of strings is printed
+    // EFFECTS: An array of strings is printed
     private void printUserMenu(String... menuItems) {
         for (String menuItem : menuItems) {
-            System.out.println(menuItem);
+            out.println(menuItem);
         }
     }
 
-    // EFFECTS: user input is captured for selecting a quote to edit / remove
+    // EFFECTS: User input is captured for selecting a quote to edit / remove
     private int selectQuoteFromMenu() {
         int userInput;
         library.viewAllQuotes();
-        System.out.println("Select a quote:");
+        out.println("Select a quote:");
         userInput = in.nextInt();
         in.nextLine();
-        returnIfInvalidInput(userInput);
+        checkIfValid(userInput, library.getQuotes().size());
         return userInput;
     }
 
-    // EFFECTS:
-    private void returnIfInvalidInput(int userInput) {
-        if (userInput < 0 || userInput >= library.getQuotes().size()) {
-            return;
+    // EFFECTS: User input is validated; if invalid, then error message is printed and 0 is returned;
+    //          otherwise return 1
+    private int checkIfValid(int userInput, int max) {
+        if (userInput < 1 || userInput >= max) {
+            out.println("Invalid entry. Please enter a # between 1 and " + max + ".");
+            return 0;
         }
+        return 1;
     }
 
-    private void returnIfNoQuotes() {
+    // EFFECTS: Library is checked for quotes; if none, then error message is printed and 0 is returned;
+    //          otherwise return 1
+    private int checkIfLibraryHasQuotes() {
         if (this.library.getQuotes().size() == 0) {
-            return;
+            out.println("You have no quotes. Try adding some quotes first.");
+            return 0;
         }
+        return 1;
     }
 
+    // Helper module to shorten code
+    // EFFECTS: String is printed
 //    void out(Object text) {
-//        System.out.println(text);
+//        out.println(text);
 //    }
 
+    // REQUIRES: phrase has a non-zero length
+    // MODIFIES: Quote and Library
+    // EFFECTS: User input is captured for phrase and author;
+    //          phrase and author are used to populate a new Quote;
+    //          the new Quote is added to the Library
     private void addQuote() {
-        System.out.println("Enter the quote:");
+        out.println("Enter the quote:");
         String phrase = in.nextLine();
-        System.out.println("Enter the author:");
+        out.println("Enter the author:");
         String author = in.nextLine();
         library.addQuote(new Quote(phrase, author));
     }
 
+    // REQUIRES: 1 <= userInput <= total number of Quotes in Library
+    // MODIFIES: Quote and Library
+    // EFFECTS: userInput is captured;
+    //          userInput is used to find Quote to delete;
+    //          Quote is deleted from Library
     private void removeQuote() {
-        returnIfNoQuotes();
+        checkIfLibraryHasQuotes();
         int userInput = selectQuoteFromMenu();
         library.removeQuote(library.getQuotes().get(userInput));
     }
 
+    // REQUIRES: 1 <= userInput <= total number of Quotes in Library; 1 <= selectedOption <= 2;
+    //           newText is a String of non-zero length
+    // MODIFIES: Quote
+    // EFFECTS: userInput is captured;
+    //          userInput is used to find Quote to edit;
+    //          selectedOption is captured;
+    //          selectedOption is used to identify which field of Quote to edit (phrase or author)
+    //          newText is captured;
+    //          newText is used to populate the selected field of Quote (phrase or author)
     private void editQuote() {
         String s0 = "What would you like to edit?";
         String s1 = "1. Phrase";
         String s2 = "2. Author";
 
-        returnIfNoQuotes();
+        checkIfLibraryHasQuotes();
         int userInput = selectQuoteFromMenu();
         Quote quote = library.getQuotes().get(userInput);
 
         printUserMenu(s0, s1, s2);
-        userInput = in.nextInt();
+        int selectedOption = in.nextInt();
         in.nextLine();
-        System.out.println("What would you like to change it to?");
+
+        out.println("What would you like to change it to?");
         String newText = in.nextLine();
-        if (userInput == 1) {
+        
+        if (selectedOption == 1) {
             quote.setPhrase(newText);
-        } else if (userInput == 2) {
+        } else if (selectedOption == 2) {
             quote.setAuthor(newText);
         } else {
             // Invalid entry
