@@ -8,21 +8,29 @@ public class Library {
     private ArrayList<Quote> quotes;
 
     // Constructor
-    // EFFECTS: library is initialized to have no quotes
+    // EFFECTS: Library is initialized to be an empty ArrayList of Quotes
     public Library() {
         quotes = new ArrayList<Quote>();
     }
 
+    // REQUIRES: quote contains a phrase String of non-zero length
+    // MODIFIES: this
+    // EFFECTS: new quote is added to Library of Quotes
     public void addQuote(Quote quote) {
         quotes.add(quote);
     }
 
+    // REQUIRES: quote contains a phrase String of non-zero length
+    // MODIFIES: this
+    // EFFECTS: new quote is removed from Library of Quotes
     public void removeQuote(Quote quote) {
         quotes.remove(quote);
     }
 
+    // REQUIRES: quote contains a phrase String of non-zero length
+    // MODIFIES: this
+    // EFFECTS: new quote replaces old quote in Library of Quotes
     public void editQuote(Quote editedQuote) {
-//        (int i = 0; i < quotes.size(); i++)
         for (Quote quote : quotes) {
            if (Objects.equals(quote.getId(), editedQuote.getId())) {
                quote = editedQuote;
@@ -30,7 +38,7 @@ public class Library {
         }
     }
 
-    public String viewAllQuotes() {
+    public String printAllQuotes() {
         String listOfQuotes = "Here is a list of your quotes:";
         int index = 0;
         for (Quote quote : quotes) {
@@ -46,7 +54,7 @@ public class Library {
         return quote;
     }
 
-    public ArrayList<Quote> getQuotes() {
+    public ArrayList<Quote> getAllQuotes() {
         return quotes;
     }
 

@@ -43,7 +43,7 @@ public class QuoteLibrary {
 
             if (userInput == 1) {
                 out.println("ENTERED 1");
-                out.println(library.viewAllQuotes());
+                out.println(library.printAllQuotes());
             } else if (userInput == 2) {
                 out.println("ENTERED 2");
                 addQuote();
@@ -71,11 +71,11 @@ public class QuoteLibrary {
     // EFFECTS: User input is captured for selecting a quote to edit / remove
     private int selectQuoteFromMenu() {
         int userInput;
-        library.viewAllQuotes();
+        library.printAllQuotes();
         out.println("Select a quote:");
         userInput = in.nextInt();
         in.nextLine();
-        checkIfValid(userInput, library.getQuotes().size());
+        checkIfValid(userInput, library.getAllQuotes().size());
         return userInput;
     }
 
@@ -92,7 +92,7 @@ public class QuoteLibrary {
     // EFFECTS: Library is checked for quotes; if none, then error message is printed and 0 is returned;
     //          otherwise return 1
     private int checkIfLibraryHasQuotes() {
-        if (this.library.getQuotes().size() == 0) {
+        if (this.library.getAllQuotes().size() == 0) {
             out.println("You have no quotes. Try adding some quotes first.");
             return 0;
         }
@@ -126,7 +126,7 @@ public class QuoteLibrary {
     private void removeQuote() {
         checkIfLibraryHasQuotes();
         int userInput = selectQuoteFromMenu();
-        library.removeQuote(library.getQuotes().get(userInput));
+        library.removeQuote(library.getAllQuotes().get(userInput));
     }
 
     // REQUIRES: 1 <= userInput <= total number of Quotes in Library; 1 <= selectedOption <= 2;
@@ -145,7 +145,7 @@ public class QuoteLibrary {
 
         checkIfLibraryHasQuotes();
         int userInput = selectQuoteFromMenu();
-        Quote quote = library.getQuotes().get(userInput);
+        Quote quote = library.getAllQuotes().get(userInput);
 
         printUserMenu(s0, s1, s2);
         int selectedOption = in.nextInt();
