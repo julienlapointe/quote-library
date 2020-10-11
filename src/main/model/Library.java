@@ -30,14 +30,11 @@ public class Library {
         }
     }
 
-    public String viewQuoteLibrary() {
-//        Quote quote;
-        String listOfQuotes = "Here is a list of your quotes: ";
+    public String viewAllQuotes() {
+        String listOfQuotes = "Here is a list of your quotes:";
         int index = 0;
         for (Quote quote : quotes) {
-//        for (int i = 0; i < quotes.size(); i++) {
-//            quote =
-            listOfQuotes = listOfQuotes.concat("\n" + index + ". " + quote.phrase + " ~ " +  quote.author);
+            listOfQuotes = listOfQuotes.concat("\n" + index + ". " + "\"" + quote.phrase + "\" ~ " +  quote.author);
             index++;
         }
         return listOfQuotes;
@@ -47,6 +44,10 @@ public class Library {
         Quote quote;
         quote = quotes.get(index - 1);
         return quote;
+    }
+
+    public ArrayList<Quote> getQuotes() {
+        return quotes;
     }
 
 }
