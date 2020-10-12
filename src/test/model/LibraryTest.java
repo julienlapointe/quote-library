@@ -27,18 +27,18 @@ class LibraryTest {
     // Source: IntegerSet example
     @Test
     void testAddQuoteNotThere() {
-        checkSetEmptyDoesntContain(quote1);
+        checkLibraryEmptyDoesntContain(quote1);
         testLibrary.addQuote(quote1);
-        checkSetContainsOnce(quote1);
+        checkLibraryContainsOnce(quote1);
     }
 
     @Test
     public void testAddQuoteAlreadyThere() {
-        checkSetEmptyDoesntContain(quote1);
+        checkLibraryEmptyDoesntContain(quote1);
         testLibrary.addQuote(quote1);
-        checkSetContainsOnce(quote1);
+        checkLibraryContainsOnce(quote1);
         testLibrary.addQuote(quote1);
-        checkSetContainsOnce(quote1);
+        checkLibraryContainsOnce(quote1);
     }
 
     @Test
@@ -60,7 +60,7 @@ class LibraryTest {
     public void testRemoveQuote() {
         testLibrary.addQuote(quote1);
         testLibrary.removeQuote(quote1);
-        checkSetEmptyDoesntContain(quote1);
+        checkLibraryEmptyDoesntContain(quote1);
     }
 
     @Test
@@ -77,12 +77,12 @@ class LibraryTest {
     // Helper methods
     // ==============
 
-    private void checkSetEmptyDoesntContain(Quote quote) {
+    private void checkLibraryEmptyDoesntContain(Quote quote) {
         assertEquals(testLibrary.getAllQuotes().size(), 0);
         assertFalse(testLibrary.getAllQuotes().contains(quote));
     }
 
-    private void checkSetContainsOnce(Quote quote) {
+    private void checkLibraryContainsOnce(Quote quote) {
         assertEquals(testLibrary.getAllQuotes().size(), 1);
         assertTrue(testLibrary.getAllQuotes().contains(quote));
     }
