@@ -51,11 +51,6 @@ public class Library {
 //        }
 //    }
 
-    // EFFECTS: returns an ArrayList of all Quotes in Library
-    public ArrayList<Quote> getAllQuotes() {
-        return quotes;
-    }
-
     // REQUIRES: 1 <= index <= total number of Quotes in Library
     // EFFECTS: returns the Quote where ID matches index - 1
 //    public Quote getQuote(int index) {
@@ -63,5 +58,10 @@ public class Library {
 //        quote = quotes.get(index - 1);
 //        return quote;
 //    }
+
+    // EFFECTS: returns an ArrayList of all Quotes in Library
+    public ArrayList<Quote> getAllQuotes() {
+        return quotes;
+    }
 
 }

@@ -28,15 +28,13 @@ public class QuoteLibrary {
         String s2 = "2. Add a quote";
         String s3 = "3. Remove a quote";
         String s4 = "4. Edit a quote";
-        String s5 = "5. Sort quotes";
-        String s6 = "6. Search for a quote";
-        String s7 = "7. Exit";
-        String[] sArray = {s0, s1, s2, s3, s4, s5, s6, s7};
+        String s5 = "5. Exit";
+        String[] sArray = {s0, s1, s2, s3, s4, s5};
         int userInput;
 
         do {
             do {
-                printUserMenu(s0, s1, s2, s3, s4, s5, s6, s7);
+                printUserMenu(s0, s1, s2, s3, s4, s5);
                 userInput = in.nextInt();
                 // Issue w/ Scanner.nextInt method not reading newline character when user hits "ENTER"
                 // Source: https://bit.ly/3iR4p4C
@@ -44,23 +42,15 @@ public class QuoteLibrary {
             } while (isInvalidInteger(userInput, sArray.length-1));
 
             if (userInput == 1) {
-                out.println("ENTERED 1");
                 out.println(printAllQuotes());
             } else if (userInput == 2) {
-                out.println("ENTERED 2");
                 addQuote();
             } else if (userInput == 3) {
-                out.println("ENTERED 3");
                 removeQuote();
             } else if (userInput == 4) {
-                out.println("ENTERED 4");
                 editQuote();
-            } else if (userInput == 5) {
-                out.println("ENTERED 5");
-            } else if (userInput == 6) {
-                out.println("ENTERED 6");
             }
-        } while (userInput != 7);
+        } while (userInput != 5);
     }
 
     // REQUIRES: phrase has a non-zero length
@@ -189,7 +179,6 @@ public class QuoteLibrary {
 
     // EFFECTS: If author length is 0, then value is set to "Anonymous"
     private String anonymousAuthorIfEmpty(String author) {
-        out.println(author.length());
         if (author.length() == 0) {
             author = "Anonymous";
         }

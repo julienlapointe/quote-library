@@ -12,9 +12,9 @@ public class Quote {
 
     // Constructor
     // REQUIRES: phrase has a non-zero length
-    // EFFECTS:  Quote is initialized with quote ID as a unique non-negative integer, phrase set to phrase, author set to
-    //           author, and tags set to tag
-    public Quote (String phrase, String author) {
+    // EFFECTS:  Quote is initialized with quote ID as a unique non-negative integer, phrase set to phrase,
+    //           author set to author, and tags set to tag
+    public Quote(String phrase, String author) {
 //    public Quote (String phrase, String author, TreeSet<String> tags) {
         this.id = nextId++;
         this.phrase = phrase;
@@ -23,25 +23,35 @@ public class Quote {
 //        this.tags = tags;
     }
 
+    // =======
     // Getters
+    // =======
+
     public int getId() {
         return this.id;
     }
+
     public String getPhrase() {
         return this.phrase;
     }
+
     public String getAuthor() {
         return this.author;
     }
+
 //    public TreeSet<String> getTags() {
 //        return this.tags;
 //    }
 
+    // =======
     // Setters
-    public void setPhrase (String phrase) {
+    // =======
+
+    public void setPhrase(String phrase) {
         this.phrase = phrase;
     }
-    public void setAuthor (String author) {
+
+    public void setAuthor(String author) {
         this.author = author;
     }
 
