@@ -15,12 +15,12 @@ people or anonymous authors.
 I am building Quote Library because I enjoy collecting quotes, but I don't have a 
 tool for **organizing** and **viewing** them. I currently use my Apple Notes app 
 to store a long list of quotes, but they are locked in reverse chronological order 
-by date added so I rarely see old quotes.  
+by date added so I rarely see old quotes again.  
 
 ### What are the user stories?
 
-- As a user, I want to be able to **add** a quote (along with the author 
-and tags) to my library.
+- As a user, I want to be able to **add** a quote (along with the author) to my 
+library.
 - As a user, I want to be able to **edit** a quote in my library.
-- As a user, I want to be able to **delete** a quote from my library.
-- As a user, I want to be able to **view** my all my quotes in a list.
+- As a user, I want to be able to **remove** a quote from my library.
+- As a user, I want to be able to **view** all my quotes in a list.
