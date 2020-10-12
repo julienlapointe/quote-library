@@ -83,8 +83,8 @@ public class QuoteLibrary {
         return userInput - 1;
     }
 
-    // EFFECTS: User input is validated; if invalid, then error message is printed and 0 is returned;
-    //          otherwise return 1
+    // EFFECTS: User input is validated; if invalid, then error message is printed and true is returned;
+    //          otherwise return false
     private boolean isInvalidInteger(int userInput, int max) {
         if (userInput < 1 || userInput > max) {
             out.println("Invalid entry. Please enter a # between 1 and " + max + ".");
@@ -93,6 +93,8 @@ public class QuoteLibrary {
         return false;
     }
 
+    // EFFECTS: User input is validated; if string length is 0, then error message is printed and false is returned;
+    //          otherwise return true
     private boolean isValidString(String userInput) {
         if (userInput.length() == 0) {
             out.println("Invalid entry. Please enter at least 1 character.");
@@ -101,8 +103,8 @@ public class QuoteLibrary {
         return true;
     }
 
-    // EFFECTS: Library is checked for quotes; if none, then error message is printed and 0 is returned;
-    //          otherwise return 1
+    // EFFECTS: Library is checked for quotes; if none, then error message is printed and false is returned;
+    //          otherwise return true
     private boolean libraryHasQuotes() {
         if (library.getAllQuotes().size() == 0) {
             out.println("You have no quotes. Try adding some quotes first.");
@@ -111,6 +113,7 @@ public class QuoteLibrary {
         return true;
     }
 
+    // EFFECTS: If author length is 0, then value is set to "Anonymous"
     private String anonymousAuthorIfEmpty(String author) {
         out.println(author.length());
         if (author.length() == 0) {

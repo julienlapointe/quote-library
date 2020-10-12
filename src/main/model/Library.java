@@ -1,6 +1,8 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 // Represents a library of all quotes
@@ -16,8 +18,14 @@ public class Library {
     // REQUIRES: quote contains a phrase String of non-zero length
     // MODIFIES: this
     // EFFECTS: New quote is added to Library of Quotes
-    public void addQuote(Quote quote) {
-        quotes.add(quote);
+    public boolean addQuote(Quote quote) {
+        List<String> listOfQuotes = Arrays.asList(quotes);
+        if (!listOfQuotes.contains(quote.phrase)) {
+            quotes.add(quote);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     // REQUIRES: quote contains a phrase String of non-zero length
