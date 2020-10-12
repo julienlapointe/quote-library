@@ -63,6 +63,80 @@ public class QuoteLibrary {
         } while (userInput != 7);
     }
 
+    // REQUIRES: phrase has a non-zero length
+    // MODIFIES: Quote and Library
+    // EFFECTS: User input is captured for phrase and author;
+    //          phrase and author are used to populate a new Quote;
+    //          the new Quote is added to the Library
+    private void addQuote() {
+        out.println("Enter the quote:");
+        String phrase = in.nextLine();
+        isValidString(phrase);
+        out.println("Enter the author:");
+        String author = in.nextLine();
+        author = anonymousAuthorIfEmpty(author);
+        boolean uniqueQuote = library.addQuote(new Quote(phrase, author));
+        if (!uniqueQuote) {
+            out.println("Sorry! That quote already exists.");
+        }
+    }
+
+    // REQUIRES: 1 <= userInput <= total number of Quotes in Library
+    // MODIFIES: Quote and Library
+    // EFFECTS: userInput is captured;
+    //          userInput is used to find Quote to delete;
+    //          Quote is deleted from Library
+    private void removeQuote() {
+        if (libraryHasQuotes()) {
+            int userInput = selectQuoteFromMenu();
+            library.removeQuote(library.getAllQuotes().get(userInput));
+        }
+    }
+
+    // REQUIRES: 1 <= userInput <= total number of Quotes in Library; 1 <= selectedOption <= 2;
+    //           newText is a String of non-zero length
+    // MODIFIES: Quote
+    // EFFECTS: userInput is captured;
+    //          userInput is used to find Quote to edit;
+    //          selectedOption is captured;
+    //          selectedOption is used to identify which field of Quote to edit (phrase or author)
+    //          newText is captured;
+    //          newText is used to populate the selected field of Quote (phrase or author)
+    private void editQuote() {
+        if (libraryHasQuotes()) {
+            String s0 = "What would you like to edit?";
+            String s1 = "1. Phrase";
+            String s2 = "2. Author";
+            String[] sArray = {s0, s1, s2};
+
+            libraryHasQuotes();
+            int userInput = selectQuoteFromMenu();
+            Quote quote = library.getAllQuotes().get(userInput);
+
+            int selectedOption;
+            do {
+                printUserMenu(s0, s1, s2);
+                selectedOption = in.nextInt();
+                in.nextLine();
+            } while (isInvalidInteger(selectedOption, sArray.length-1));
+
+            out.println("What would you like to change it to?");
+            String editedText = in.nextLine();
+
+            if (selectedOption == 1) {
+                isValidString(editedText);
+                quote.setPhrase(editedText);
+            } else {
+                editedText = anonymousAuthorIfEmpty(editedText);
+                quote.setAuthor(editedText);
+            }
+        }
+    }
+
+    // ==============
+    // Helper methods
+    // ==============
+
     // EFFECTS: An array of strings is printed
     private void printUserMenu(String... menuItems) {
         for (String menuItem : menuItems) {
@@ -134,75 +208,5 @@ public class QuoteLibrary {
             }
         }
         return allQuotes;
-    }
-
-    // REQUIRES: phrase has a non-zero length
-    // MODIFIES: Quote and Library
-    // EFFECTS: User input is captured for phrase and author;
-    //          phrase and author are used to populate a new Quote;
-    //          the new Quote is added to the Library
-    private void addQuote() {
-        out.println("Enter the quote:");
-        String phrase = in.nextLine();
-        isValidString(phrase);
-        out.println("Enter the author:");
-        String author = in.nextLine();
-        author = anonymousAuthorIfEmpty(author);
-        boolean uniqueQuote = library.addQuote(new Quote(phrase, author));
-        if (!uniqueQuote) {
-            out.println("Sorry! That quote already exists.");
-        }
-    }
-
-    // REQUIRES: 1 <= userInput <= total number of Quotes in Library
-    // MODIFIES: Quote and Library
-    // EFFECTS: userInput is captured;
-    //          userInput is used to find Quote to delete;
-    //          Quote is deleted from Library
-    private void removeQuote() {
-        if (libraryHasQuotes()) {
-            int userInput = selectQuoteFromMenu();
-            library.removeQuote(library.getAllQuotes().get(userInput));
-        }
-    }
-
-    // REQUIRES: 1 <= userInput <= total number of Quotes in Library; 1 <= selectedOption <= 2;
-    //           newText is a String of non-zero length
-    // MODIFIES: Quote
-    // EFFECTS: userInput is captured;
-    //          userInput is used to find Quote to edit;
-    //          selectedOption is captured;
-    //          selectedOption is used to identify which field of Quote to edit (phrase or author)
-    //          newText is captured;
-    //          newText is used to populate the selected field of Quote (phrase or author)
-    private void editQuote() {
-        if (libraryHasQuotes()) {
-            String s0 = "What would you like to edit?";
-            String s1 = "1. Phrase";
-            String s2 = "2. Author";
-            String[] sArray = {s0, s1, s2};
-
-            libraryHasQuotes();
-            int userInput = selectQuoteFromMenu();
-            Quote quote = library.getAllQuotes().get(userInput);
-
-            int selectedOption;
-            do {
-                printUserMenu(s0, s1, s2);
-                selectedOption = in.nextInt();
-                in.nextLine();
-            } while (isInvalidInteger(userInput, sArray.length-1));
-
-            out.println("What would you like to change it to?");
-            String editedText = in.nextLine();
-
-            if (selectedOption == 1) {
-                isValidString(editedText);
-                quote.setPhrase(editedText);
-            } else {
-                editedText = anonymousAuthorIfEmpty(editedText);
-                quote.setAuthor(editedText);
-            }
-        }
     }
 }

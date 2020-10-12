@@ -56,7 +56,27 @@ class LibraryTest {
         }
     }
 
+    @Test
+    public void testRemoveQuote() {
+        testLibrary.addQuote(quote1);
+        testLibrary.removeQuote(quote1);
+        checkSetEmptyDoesntContain(quote1);
+    }
+
+    @Test
+    public void testEditQuote() {
+        testLibrary.addQuote(quote1);
+        quote1.setPhrase("Test");
+        quote1.setAuthor("Test");
+//        testLibrary.editQuote(quote1);
+        assertEquals(quote1.getPhrase(), "Test");
+        assertEquals(quote1.getAuthor(), "Test");
+    }
+
+    // ==============
     // Helper methods
+    // ==============
+
     private void checkSetEmptyDoesntContain(Quote quote) {
         assertEquals(testLibrary.getAllQuotes().size(), 0);
         assertFalse(testLibrary.getAllQuotes().contains(quote));
@@ -70,7 +90,7 @@ class LibraryTest {
     private String randomString() {
         // String of all possible characters
         String alphabet = "abcdefghijklmnopqrstuvwxyz";
-        // Create string builder
+        // Create a StringBuilder object
         StringBuilder stringBuilder = new StringBuilder();
         Random random = new Random();
         int length = 10;
