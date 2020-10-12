@@ -23,23 +23,19 @@ public class QuoteLibrary {
     void runApp() {
         out.println("WELCOME TO QUOTE LIBRARY");
         out.println("========================");
-        String s0 = "PLEASE SELECT AN OPTION:";
-        String s1 = "1. View all quotes in library";
-        String s2 = "2. Add a quote";
-        String s3 = "3. Remove a quote";
-        String s4 = "4. Edit a quote";
-        String s5 = "5. Exit";
-        String[] sArray = {s0, s1, s2, s3, s4, s5};
+        out.println("PLEASE SELECT AN OPTION:");
+        String[] options = {"1. View all quotes in library", "2. Add a quote", "3. Remove a quote", "4. Edit a quote",
+                            "5. Exit"};
         int userInput;
 
         do {
             do {
-                printUserMenu(s0, s1, s2, s3, s4, s5);
+                printUserMenu(options);
                 userInput = in.nextInt();
                 // Issue w/ Scanner.nextInt method not reading newline character when user hits "ENTER"
                 // Source: https://bit.ly/3iR4p4C
                 in.nextLine();
-            } while (isInvalidInteger(userInput, sArray.length-1));
+            } while (isInvalidInteger(userInput, options.length));
 
             if (userInput == 1) {
                 out.println(printAllQuotes());
@@ -94,10 +90,7 @@ public class QuoteLibrary {
     //          newText is used to populate the selected field of Quote (phrase or author)
     private void editQuote() {
         if (libraryHasQuotes()) {
-            String s0 = "What would you like to edit?";
-            String s1 = "1. Phrase";
-            String s2 = "2. Author";
-            String[] sArray = {s0, s1, s2};
+            String[] options = {"1. Phrase", "2. Author"};
 
             libraryHasQuotes();
             int userInput = selectQuoteFromMenu();
@@ -105,10 +98,11 @@ public class QuoteLibrary {
 
             int selectedOption;
             do {
-                printUserMenu(s0, s1, s2);
+                out.println("What would you like to edit?");
+                printUserMenu(options);
                 selectedOption = in.nextInt();
                 in.nextLine();
-            } while (isInvalidInteger(selectedOption, sArray.length-1));
+            } while (isInvalidInteger(selectedOption, options.length));
 
             out.println("What would you like to change it to?");
             String editedText = in.nextLine();
@@ -142,7 +136,7 @@ public class QuoteLibrary {
             out.println("Select a quote:");
             userInput = in.nextInt();
             in.nextLine();
-        } while(isInvalidInteger(userInput, library.getAllQuotes().size()));
+        } while (isInvalidInteger(userInput, library.getAllQuotes().size()));
         // Subtract 1 because array index starts at 0
         return userInput - 1;
     }
@@ -187,15 +181,15 @@ public class QuoteLibrary {
 
     // EFFECTS: all quotes in library are printed in a numbered list starting at 0
     public String printAllQuotes() {
-        String allQuotes = "";
+        String quotes = "";
         if (libraryHasQuotes()) {
-            allQuotes = allQuotes.concat("Here is a list of your quotes:");
+            quotes = quotes.concat("Here is a list of your quotes: \n");
             int index = 1;
             for (Quote quote : library.getAllQuotes()) {
-                allQuotes = allQuotes.concat("\n" + index + ". " + "\"" + quote.getPhrase() + "\" ~ " +  quote.getAuthor());
+                quotes = quotes.concat(index + ". " + "\"" + quote.getPhrase() + "\" ~ " +  quote.getAuthor() + "\n");
                 index++;
             }
         }
-        return allQuotes;
+        return quotes;
     }
 }
