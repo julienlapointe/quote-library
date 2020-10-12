@@ -21,9 +21,9 @@ public class QuoteLibrary {
 
     // EFFECTS: User menu is printed, user input is captured, and corresponding method is called
     void runApp() {
-        out.println("Welcome to Quoterrific");
-        out.println("======================");
-        String s0 = "Please select an option:";
+        out.println("WELCOME TO QUOTE LIBRARY");
+        out.println("========================");
+        String s0 = "PLEASE SELECT AN OPTION:";
         String s1 = "1. View all quotes in library";
         String s2 = "2. Add a quote";
         String s3 = "3. Remove a quote";
@@ -31,6 +31,7 @@ public class QuoteLibrary {
         String s5 = "5. Sort quotes";
         String s6 = "6. Search for a quote";
         String s7 = "7. Exit";
+        String[] sArray = {s0, s1, s2, s3, s4, s5, s6, s7};
         int userInput;
 
         do {
@@ -39,7 +40,7 @@ public class QuoteLibrary {
             // Issue w/ Scanner.nextInt method not reading newline character when user hits "ENTER"
             // Source: https://bit.ly/3iR4p4C
             in.nextLine();
-            isValid(userInput, 7);
+            isValidInteger(userInput, sArray.length-1);
 
             if (userInput == 1) {
                 out.println("ENTERED 1");
@@ -75,15 +76,23 @@ public class QuoteLibrary {
         out.println("Select a quote:");
         userInput = in.nextInt();
         in.nextLine();
-        isValid(userInput, library.getAllQuotes().size());
+        isValidInteger(userInput, library.getAllQuotes().size());
         return userInput;
     }
 
     // EFFECTS: User input is validated; if invalid, then error message is printed and 0 is returned;
     //          otherwise return 1
-    private boolean isValid(int userInput, int max) {
+    private boolean isValidInteger(int userInput, int max) {
         if (userInput < 1 || userInput >= max) {
             out.println("Invalid entry. Please enter a # between 1 and " + max + ".");
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isValidString(String userInput) {
+        if (userInput.length() == 0) {
+            out.println("Invalid entry. Please enter at least 1 character.");
             return false;
         }
         return true;
@@ -97,6 +106,14 @@ public class QuoteLibrary {
             return false;
         }
         return true;
+    }
+
+    private String anonymousAuthorIfEmpty(String author) {
+        out.println(author.length());
+        if (author.length() == 0) {
+            author = "Anonymous";
+        }
+        return author;
     }
 
     // EFFECTS: all quotes in library are printed in a numbered list starting at 0
@@ -121,8 +138,10 @@ public class QuoteLibrary {
     private void addQuote() {
         out.println("Enter the quote:");
         String phrase = in.nextLine();
+        isValidString(phrase);
         out.println("Enter the author:");
         String author = in.nextLine();
+        author = anonymousAuthorIfEmpty(author);
         library.addQuote(new Quote(phrase, author));
     }
 
@@ -152,6 +171,7 @@ public class QuoteLibrary {
             String s0 = "What would you like to edit?";
             String s1 = "1. Phrase";
             String s2 = "2. Author";
+            String[] sArray = {s0, s1, s2};
 
             libraryHasQuotes();
             int userInput = selectQuoteFromMenu();
@@ -160,19 +180,18 @@ public class QuoteLibrary {
             printUserMenu(s0, s1, s2);
             int selectedOption = in.nextInt();
             in.nextLine();
+            isValidInteger(userInput, sArray.length-1);
 
             out.println("What would you like to change it to?");
-            String newText = in.nextLine();
+            String editedText = in.nextLine();
 
             if (selectedOption == 1) {
-                quote.setPhrase(newText);
-            } else if (selectedOption == 2) {
-                quote.setAuthor(newText);
+                isValidString(editedText);
+                quote.setPhrase(editedText);
             } else {
-                // Invalid entry
-                return;
+                editedText = anonymousAuthorIfEmpty(editedText);
+                quote.setAuthor(editedText);
             }
-            // library.viewAllQuotes();
         }
     }
 }
