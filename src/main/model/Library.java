@@ -17,15 +17,20 @@ public class Library {
 
     // REQUIRES: quote contains a phrase String of non-zero length
     // MODIFIES: this
-    // EFFECTS: New quote is added to Library of Quotes
-    public boolean addQuote(Quote quote) {
-        List<String> listOfQuotes = Arrays.asList(quotes);
-        if (!listOfQuotes.contains(quote.phrase)) {
-            quotes.add(quote);
-            return true;
-        } else {
-            return false;
+    // EFFECTS: newQuote is validated as unique, then added to Library of Quotes
+    public boolean addQuote(Quote newQuote) {
+        for (Quote quote : quotes) {
+            if (quote.getPhrase().contains(newQuote.phrase)) {
+                return false;
+            }
         }
+        quotes.add(newQuote);
+        return true;
+//        if (getAllQuotes().contains(newQuote.phrase)) {
+//            return false;
+//        }
+//        quotes.add(newQuote);
+//        return true;
     }
 
     // REQUIRES: quote contains a phrase String of non-zero length

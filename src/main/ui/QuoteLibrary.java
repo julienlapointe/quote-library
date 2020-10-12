@@ -148,7 +148,10 @@ public class QuoteLibrary {
         out.println("Enter the author:");
         String author = in.nextLine();
         author = anonymousAuthorIfEmpty(author);
-        library.addQuote(new Quote(phrase, author));
+        boolean uniqueQuote = library.addQuote(new Quote(phrase, author));
+        if (!uniqueQuote) {
+            out.println("Sorry! That quote already exists.");
+        }
     }
 
     // REQUIRES: 1 <= userInput <= total number of Quotes in Library
