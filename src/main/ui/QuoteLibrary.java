@@ -35,12 +35,13 @@ public class QuoteLibrary {
         int userInput;
 
         do {
-            printUserMenu(s0, s1, s2, s3, s4, s5, s6, s7);
-            userInput = in.nextInt();
-            // Issue w/ Scanner.nextInt method not reading newline character when user hits "ENTER"
-            // Source: https://bit.ly/3iR4p4C
-            in.nextLine();
-            isValidInteger(userInput, sArray.length-1);
+            do {
+                printUserMenu(s0, s1, s2, s3, s4, s5, s6, s7);
+                userInput = in.nextInt();
+                // Issue w/ Scanner.nextInt method not reading newline character when user hits "ENTER"
+                // Source: https://bit.ly/3iR4p4C
+                in.nextLine();
+            } while (isInvalidInteger(userInput, sArray.length-1));
 
             if (userInput == 1) {
                 out.println("ENTERED 1");
@@ -73,21 +74,23 @@ public class QuoteLibrary {
     private int selectQuoteFromMenu() {
         int userInput;
         printAllQuotes();
-        out.println("Select a quote:");
-        userInput = in.nextInt();
-        in.nextLine();
-        isValidInteger(userInput, library.getAllQuotes().size());
-        return userInput;
+        do {
+            out.println("Select a quote:");
+            userInput = in.nextInt();
+            in.nextLine();
+        } while(isInvalidInteger(userInput, library.getAllQuotes().size()));
+        // Subtract 1 because array index starts at 0
+        return userInput - 1;
     }
 
     // EFFECTS: User input is validated; if invalid, then error message is printed and 0 is returned;
     //          otherwise return 1
-    private boolean isValidInteger(int userInput, int max) {
-        if (userInput < 1 || userInput >= max) {
+    private boolean isInvalidInteger(int userInput, int max) {
+        if (userInput < 1 || userInput > max) {
             out.println("Invalid entry. Please enter a # between 1 and " + max + ".");
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     private boolean isValidString(String userInput) {
@@ -153,7 +156,7 @@ public class QuoteLibrary {
     private void removeQuote() {
         if (libraryHasQuotes()) {
             int userInput = selectQuoteFromMenu();
-            library.removeQuote(library.getAllQuotes().get(userInput - 1));
+            library.removeQuote(library.getAllQuotes().get(userInput));
         }
     }
 
@@ -175,12 +178,14 @@ public class QuoteLibrary {
 
             libraryHasQuotes();
             int userInput = selectQuoteFromMenu();
-            Quote quote = library.getAllQuotes().get(userInput - 1);
+            Quote quote = library.getAllQuotes().get(userInput);
 
-            printUserMenu(s0, s1, s2);
-            int selectedOption = in.nextInt();
-            in.nextLine();
-            isValidInteger(userInput, sArray.length-1);
+            int selectedOption;
+            do {
+                printUserMenu(s0, s1, s2);
+                selectedOption = in.nextInt();
+                in.nextLine();
+            } while (isInvalidInteger(userInput, sArray.length-1));
 
             out.println("What would you like to change it to?");
             String editedText = in.nextLine();
