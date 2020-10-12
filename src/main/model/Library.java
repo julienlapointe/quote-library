@@ -15,21 +15,21 @@ public class Library {
 
     // REQUIRES: quote contains a phrase String of non-zero length
     // MODIFIES: this
-    // EFFECTS: new quote is added to Library of Quotes
+    // EFFECTS: New quote is added to Library of Quotes
     public void addQuote(Quote quote) {
         quotes.add(quote);
     }
 
     // REQUIRES: quote contains a phrase String of non-zero length
     // MODIFIES: this
-    // EFFECTS: new quote is removed from Library of Quotes
+    // EFFECTS: New quote is removed from Library of Quotes
     public void removeQuote(Quote quote) {
         quotes.remove(quote);
     }
 
     // REQUIRES: quote contains a phrase String of non-zero length
     // MODIFIES: this
-    // EFFECTS: new quote replaces old quote in Library of Quotes
+    // EFFECTS: New quote replaces old quote in Library of Quotes
     public void editQuote(Quote editedQuote) {
         for (Quote quote : quotes) {
            if (Objects.equals(quote.getId(), editedQuote.getId())) {
@@ -38,24 +38,17 @@ public class Library {
         }
     }
 
-    public String printAllQuotes() {
-        String listOfQuotes = "Here is a list of your quotes:";
-        int index = 0;
-        for (Quote quote : quotes) {
-            listOfQuotes = listOfQuotes.concat("\n" + index + ". " + "\"" + quote.phrase + "\" ~ " +  quote.author);
-            index++;
-        }
-        return listOfQuotes;
+    // EFFECTS: returns an ArrayList of all Quotes in Library
+    public ArrayList<Quote> getAllQuotes() {
+        return quotes;
     }
 
+    // REQUIRES: 1 <= index <= total number of Quotes in Library
+    // EFFECTS: returns the Quote where ID matches index - 1
     public Quote getQuote(int index) {
         Quote quote;
         quote = quotes.get(index - 1);
         return quote;
-    }
-
-    public ArrayList<Quote> getAllQuotes() {
-        return quotes;
     }
 
 }

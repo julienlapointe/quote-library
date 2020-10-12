@@ -4,11 +4,11 @@ package model;
 
 // Represents a quote having an ID, phrase, author (optional), and tag(s)
 public class Quote {
-    protected static int nextId = 0;          // tracks id of next quote created
-    protected int id = 0;                     // quote id
-    protected String phrase = "";             // phrase of quote
-    protected String author = "Anonymous";    // author of quote
-//    private TreeSet<String> tags;           // tag(s) of quote
+    protected static int nextId = 0;    // tracks id of next quote created
+    protected int id = 0;               // quote id
+    public String phrase = "";          // phrase of quote
+    public String author = "Anonymous"; // author of quote
+//    private TreeSet<String> tags;     // tag(s) of quote
 
     // Constructor
     // REQUIRES: phrase has a non-zero length
