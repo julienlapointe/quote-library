@@ -3,6 +3,7 @@
 //   keeps track of tag name and array of quote IDs?
 // - How to test editQuote() method? Not possible due to UI?
 // - How to deal with invalid user inputs? Ex. char when expecting int
+//   Use a try-catch statement?
 
 package ui;
 

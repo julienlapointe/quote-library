@@ -2,10 +2,9 @@ package model;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Random;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class LibraryTest {
 
@@ -59,6 +58,7 @@ class LibraryTest {
     @Test
     public void testRemoveQuote() {
         testLibrary.addQuote(quote1);
+        checkLibraryContainsOnce(quote1);
         testLibrary.removeQuote(quote1);
         checkLibraryEmptyDoesntContain(quote1);
     }
