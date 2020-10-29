@@ -24,5 +24,5 @@ library.
 - As a user, I want to be able to **edit** a quote in my library.
 - As a user, I want to be able to **remove** a quote from my library.
 - As a user, I want to be able to **view** all my quotes in a list.
-- As a user, I want my library of quotes to auto-save to a file.
-- As a user, I want my library of quotes to auto-load from a file.
+- As a user, I want my library of quotes to **auto-save** to a file.
+- As a user, I want my library of quotes to **auto-load** from a file.
