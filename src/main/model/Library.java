@@ -1,9 +1,13 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.util.ArrayList;
 
 // Represents a library of all quotes
-public class Library {
+public class Library implements Writable {
     private ArrayList<Quote> quotes;
 
     // Constructor
@@ -37,4 +41,26 @@ public class Library {
         return quotes;
     }
 
+    // EFFECTS: returns number of thingies in this workroom
+    public int numberOfQuotes() {
+        return quotes.size();
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("Quote Library", quotesToJson());
+        return json;
+    }
+
+    // EFFECTS: returns things in this workroom as a JSON array
+    private JSONArray quotesToJson() {
+        JSONArray jsonArray = new JSONArray();
+
+        for (Quote quote : quotes) {
+            jsonArray.put(quote.toJson());
+        }
+
+        return jsonArray;
+    }
 }

@@ -1,9 +1,12 @@
 package model;
 
+import org.json.JSONObject;
+import persistence.Writable;
+
 // import java.util.TreeSet;
 
 // Represents a quote having an ID, phrase, author (optional), and tag(s)
-public class Quote {
+public class Quote implements Writable {
     protected static int nextId = 0;    // tracks id of next quote created
     protected int id = 0;               // quote id
     public String phrase = "";          // phrase of quote
@@ -55,4 +58,11 @@ public class Quote {
         this.author = author;
     }
 
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("phrase", this.phrase);
+        json.put("author", this.author);
+        return json;
+    }
 }

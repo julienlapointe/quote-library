@@ -26,3 +26,6 @@ library.
 - As a user, I want to be able to **view** all my quotes in a list.
 - As a user, I want my library of quotes to **auto-save** to a file.
 - As a user, I want my library of quotes to **auto-load** from a file.
+
+Citations
+- Persistence code based on https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo.git

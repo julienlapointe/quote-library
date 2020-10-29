@@ -3,6 +3,11 @@ package ui;
 // Imports
 import model.Library;
 import model.Quote;
+import persistence.JsonReader;
+import persistence.JsonWriter;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Scanner;
 import static java.lang.System.out;
 
@@ -11,11 +16,16 @@ public class QuoteLibrary {
     // Fields
     Library library;
     Scanner in = new Scanner(System.in);
+    private static final String JSON_STORE = "./data/quotes.json";
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
 
     // Constructor
     // EFFECTS: Library is initialized and the app is run
-    public QuoteLibrary() {
+    public QuoteLibrary() throws FileNotFoundException {
         library = new Library();
+        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(JSON_STORE);
         runApp();
     }
 
@@ -25,7 +35,7 @@ public class QuoteLibrary {
         out.println("========================");
         out.println("PLEASE SELECT AN OPTION:");
         String[] options = {"1. View all quotes in library", "2. Add a quote", "3. Remove a quote", "4. Edit a quote",
-                            "5. Exit"};
+                            "5. Save library", "6. Load library", "7. Exit"};
         int userInput;
 
         do {
@@ -45,8 +55,12 @@ public class QuoteLibrary {
                 removeQuote();
             } else if (userInput == 4) {
                 editQuote();
+            } else if (userInput == 5) {
+                saveLibrary();
+            } else if (userInput == 6) {
+                loadLibrary();
             }
-        } while (userInput != 5);
+        } while (userInput != 7);
     }
 
     // REQUIRES: phrase has a non-zero length
@@ -114,6 +128,33 @@ public class QuoteLibrary {
                 editedText = anonymousAuthorIfEmpty(editedText);
                 quote.setAuthor(editedText);
             }
+        }
+    }
+
+    // ===========
+    // Persistence
+    // ===========
+
+    // EFFECTS: saves the workroom to file
+    private void saveLibrary() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(library);
+            jsonWriter.close();
+            System.out.println("Saved your quotes to " + JSON_STORE);
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write to file: " + JSON_STORE);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: loads workroom from file
+    private void loadLibrary() {
+        try {
+            library = jsonReader.read();
+            System.out.println("Loaded your quotes from " + JSON_STORE);
+        } catch (IOException e) {
+            System.out.println("Unable to read from file: " + JSON_STORE);
         }
     }
 

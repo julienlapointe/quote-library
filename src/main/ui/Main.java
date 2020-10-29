@@ -7,9 +7,15 @@
 
 package ui;
 
+import java.io.FileNotFoundException;
+
 // Represents an instance of the QuoteLibrary app
 public class Main {
     public static void main(String[] args) {
-        new QuoteLibrary();
+        try {
+            new QuoteLibrary();
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to run application: file not found");
+        }
     }
 }
