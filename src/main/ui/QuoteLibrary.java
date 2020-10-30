@@ -31,11 +31,13 @@ public class QuoteLibrary {
 
     // EFFECTS: User menu is printed, user input is captured, and corresponding method is called
     void runApp() {
+        loadLibrary();
+
         out.println("WELCOME TO QUOTE LIBRARY");
         out.println("========================");
         out.println("PLEASE SELECT AN OPTION:");
         String[] options = {"1. View all quotes in library", "2. Add a quote", "3. Remove a quote", "4. Edit a quote",
-                            "5. Save library", "6. Load library", "7. Exit"};
+                            "5. Exit"};
         int userInput;
 
         do {
@@ -55,12 +57,8 @@ public class QuoteLibrary {
                 removeQuote();
             } else if (userInput == 4) {
                 editQuote();
-            } else if (userInput == 5) {
-                saveLibrary();
-            } else if (userInput == 6) {
-                loadLibrary();
             }
-        } while (userInput != 7);
+        } while (userInput != 5);
     }
 
     // REQUIRES: phrase has a non-zero length
@@ -79,6 +77,7 @@ public class QuoteLibrary {
         if (!uniqueQuote) {
             out.println("Sorry! That quote already exists.");
         }
+        saveLibrary();
     }
 
     // REQUIRES: 1 <= userInput <= total number of Quotes in Library
@@ -91,6 +90,7 @@ public class QuoteLibrary {
             int userInput = selectQuoteFromMenu();
             library.removeQuote(library.getAllQuotes().get(userInput));
         }
+        saveLibrary();
     }
 
     // REQUIRES: 1 <= userInput <= total number of Quotes in Library; 1 <= selectedOption <= 2;
@@ -129,6 +129,7 @@ public class QuoteLibrary {
                 quote.setAuthor(editedText);
             }
         }
+        saveLibrary();
     }
 
     // ===========
