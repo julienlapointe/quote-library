@@ -23,7 +23,7 @@ class JsonReaderTest extends JsonTest {
     }
 
     @Test
-    void testJsonReaderEmptyWorkRoom() {
+    void testJsonReaderEmptyNoQuotes() {
         JsonReader reader = new JsonReader("./data/testJsonReaderNoQuotes.json");
         try {
             Library library = reader.read();
@@ -34,7 +34,7 @@ class JsonReaderTest extends JsonTest {
     }
 
     @Test
-    void testJsonReaderGeneralWorkRoom() {
+    void testJsonReaderGeneralSomeQuotes() {
         JsonReader reader = new JsonReader("./data/testJsonReaderSomeQuotes.json");
         try {
             Library library = reader.read();

@@ -11,19 +11,15 @@ public class Quote implements Writable {
     protected int id = 0;               // quote id
     public String phrase = "";          // phrase of quote
     public String author = "Anonymous"; // author of quote
-//    private TreeSet<String> tags;     // tag(s) of quote
 
     // Constructor
     // REQUIRES: phrase has a non-zero length
     // EFFECTS:  Quote is initialized with quote ID as a unique non-negative integer, phrase set to phrase,
     //           author set to author, and tags set to tag
     public Quote(String phrase, String author) {
-//    public Quote (String phrase, String author, TreeSet<String> tags) {
         this.id = nextId++;
         this.phrase = phrase;
         this.author = author;
-//        this.tags = TreeSet<String>();
-//        this.tags = tags;
     }
 
     // =======
@@ -42,10 +38,6 @@ public class Quote implements Writable {
         return this.author;
     }
 
-//    public TreeSet<String> getTags() {
-//        return this.tags;
-//    }
-
     // =======
     // Setters
     // =======
@@ -58,6 +50,8 @@ public class Quote implements Writable {
         this.author = author;
     }
 
+    // EFFECTS: puts a Quote's phrase and author into a JSON Object and returns it
+    // NOTE:    JSON uses key-value pairs
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();

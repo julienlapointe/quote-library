@@ -6,7 +6,7 @@ import persistence.Writable;
 
 import java.util.ArrayList;
 
-// Represents a library of all quotes
+// Represents a library that stores a collection of quotes
 public class Library implements Writable {
     private ArrayList<Quote> quotes;
 
@@ -18,18 +18,11 @@ public class Library implements Writable {
 
     // REQUIRES: quote contains a phrase String of non-zero length
     // MODIFIES: this
-    // EFFECTS: newQuote is validated as unique, then added to Library of Quotes
-    public boolean addQuote(Quote newQuote) {
-        for (Quote quote : quotes) {
-            if (quote.getPhrase().contains(newQuote.phrase)) {
-                return false;
-            }
-        }
+    // EFFECTS: newQuote is added to the Library of Quotes
+    public void addQuote(Quote newQuote) {
         quotes.add(newQuote);
-        return true;
     }
 
-    // REQUIRES: quote contains a phrase String of non-zero length
     // MODIFIES: this
     // EFFECTS: Quote is removed from Library of Quotes
     public void removeQuote(Quote quote) {
@@ -41,26 +34,26 @@ public class Library implements Writable {
         return quotes;
     }
 
-    // EFFECTS: returns number of thingies in this workroom
+    // EFFECTS: returns the number of Quotes in Library
     public int numberOfQuotes() {
         return quotes.size();
     }
 
+    // EFFECTS: puts the JSON Array of all Quotes in Library into a JSON Object at key "quotes" and returns it
+    // NOTE:    JSON uses key-value pairs
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
-        json.put("Quote Library", quotesToJson());
+        json.put("quotes", quotesToJson());
         return json;
     }
 
-    // EFFECTS: returns things in this workroom as a JSON array
+    // EFFECTS: puts each Quote from Library into a JSON array and returns it
     private JSONArray quotesToJson() {
         JSONArray jsonArray = new JSONArray();
-
         for (Quote quote : quotes) {
             jsonArray.put(quote.toJson());
         }
-
         return jsonArray;
     }
 }

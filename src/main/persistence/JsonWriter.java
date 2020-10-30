@@ -5,28 +5,31 @@ import org.json.JSONObject;
 
 import java.io.*;
 
-// Represents a writer that writes JSON representation of workroom to file
+// Represents a writer that writes a JSON representation of Library to a file
 public class JsonWriter {
     private static final int TAB = 4;
     private PrintWriter writer;
-    private String destination;
+    private String jsonFileLocation;
 
     // EFFECTS: constructs writer to write to destination file
-    public JsonWriter(String destination) {
-        this.destination = destination;
+    public JsonWriter(String jsonFileLocation) {
+        this.jsonFileLocation = jsonFileLocation;
     }
 
     // MODIFIES: this
-    // EFFECTS: opens writer; throws FileNotFoundException if destination file cannot
-    // be opened for writing
+    // EFFECTS: opens writer; throws FileNotFoundException if destination file cannot be opened
     public void open() throws FileNotFoundException {
-        writer = new PrintWriter(new File(destination));
+        // PrintWriter object: http://stleary.github.io/JSON-java/index.html
+        // prints formatted representations of objects to a text-output stream
+        writer = new PrintWriter(new File(jsonFileLocation));
     }
 
     // MODIFIES: this
-    // EFFECTS: writes JSON representation of workroom to file
+    // EFFECTS: writes a JSON representation of Library to a file
     public void write(Library library) {
         JSONObject json = library.toJson();
+        // toString(int indentFactor); http://stleary.github.io/JSON-java/index.html
+        // makes pretty JSON text of the JSON Object (json in this case)
         saveToFile(json.toString(TAB));
     }
 

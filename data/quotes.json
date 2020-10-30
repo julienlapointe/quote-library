@@ -1,4 +1,18 @@
-{"Quote Library": [{
-    "phrase": "Blah",
-    "author": "Blah"
-}]}
+{"quotes": [
+    {
+        "phrase": "Blah",
+        "author": "Blah"
+    },
+    {
+        "phrase": "Test",
+        "author": "Test"
+    },
+    {
+        "phrase": "New",
+        "author": "Anonymous"
+    },
+    {
+        "phrase": "Another One!",
+        "author": "Anonymous"
+    }
+]}

@@ -25,20 +25,21 @@ class LibraryTest {
 
     // Source: IntegerSet example
     @Test
-    void testAddQuoteNotThere() {
+    void testAddQuote() {
         checkLibraryEmptyDoesntContain(quote1);
         testLibrary.addQuote(quote1);
         checkLibraryContainsOnce(quote1);
     }
 
-    @Test
-    public void testAddQuoteAlreadyThere() {
-        checkLibraryEmptyDoesntContain(quote1);
-        testLibrary.addQuote(quote1);
-        checkLibraryContainsOnce(quote1);
-        testLibrary.addQuote(quote1);
-        checkLibraryContainsOnce(quote1);
-    }
+    // Test adding duplicate quotes
+//    @Test
+//    public void testAddQuoteDuplicate() {
+//        checkLibraryEmptyDoesntContain(quote1);
+//        testLibrary.addQuote(quote1);
+//        checkLibraryContainsOnce(quote1);
+//        testLibrary.addQuote(quote1);
+//        checkLibraryContainsOnce(quote1);
+//    }
 
     @Test
     public void testAddQuoteHighVolume() {

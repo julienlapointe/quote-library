@@ -1,13 +1,15 @@
 package ui;
 
 // Imports
+import exceptions.DuplicateException;
+import java.io.IOException;
+
 import model.Library;
 import model.Quote;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Scanner;
 import static java.lang.System.out;
 
@@ -16,7 +18,7 @@ public class QuoteLibrary {
     // Fields
     Library library;
     Scanner in = new Scanner(System.in);
-    private static final String JSON_STORE = "./data/quotes.json";
+    private static final String JSON_FILE_LOCATION = "./data/quotes.json";
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
 
@@ -24,8 +26,8 @@ public class QuoteLibrary {
     // EFFECTS: Library is initialized and the app is run
     public QuoteLibrary() throws FileNotFoundException {
         library = new Library();
-        jsonWriter = new JsonWriter(JSON_STORE);
-        jsonReader = new JsonReader(JSON_STORE);
+        jsonWriter = new JsonWriter(JSON_FILE_LOCATION);
+        jsonReader = new JsonReader(JSON_FILE_LOCATION);
         runApp();
     }
 
@@ -73,11 +75,15 @@ public class QuoteLibrary {
         out.println("Enter the author:");
         String author = in.nextLine();
         author = anonymousAuthorIfEmpty(author);
-        boolean uniqueQuote = library.addQuote(new Quote(phrase, author));
-        if (!uniqueQuote) {
+        Quote newQuote = new Quote(phrase, author);
+        try {
+            // checkDuplicate() throws DuplicateException()
+            checkDuplicate(newQuote);
+            library.addQuote(newQuote);
+            saveLibrary();
+        } catch (DuplicateException e) {
             out.println("Sorry! That quote already exists.");
         }
-        saveLibrary();
     }
 
     // REQUIRES: 1 <= userInput <= total number of Quotes in Library
@@ -136,26 +142,26 @@ public class QuoteLibrary {
     // Persistence
     // ===========
 
-    // EFFECTS: saves the workroom to file
+    // EFFECTS: saves the Library to file
     private void saveLibrary() {
         try {
             jsonWriter.open();
             jsonWriter.write(library);
             jsonWriter.close();
-            System.out.println("Saved your quotes to " + JSON_STORE);
+            System.out.println("Saved your quotes to " + JSON_FILE_LOCATION);
         } catch (FileNotFoundException e) {
-            System.out.println("Unable to write to file: " + JSON_STORE);
+            System.out.println("Unable to write to file: " + JSON_FILE_LOCATION);
         }
     }
 
     // MODIFIES: this
-    // EFFECTS: loads workroom from file
+    // EFFECTS: loads Library from file
     private void loadLibrary() {
         try {
             library = jsonReader.read();
-            System.out.println("Loaded your quotes from " + JSON_STORE);
+            System.out.println("Loaded your quotes from " + JSON_FILE_LOCATION);
         } catch (IOException e) {
-            System.out.println("Unable to read from file: " + JSON_STORE);
+            System.out.println("Unable to read from file: " + JSON_FILE_LOCATION);
         }
     }
 
@@ -201,6 +207,16 @@ public class QuoteLibrary {
             return false;
         }
         return true;
+    }
+
+    // EFFECTS: newQuote phrase is checked for duplicates; if unique, then do nothing; if duplicate, then throw
+    //          DuplicateException
+    private void checkDuplicate(Quote newQuote) throws DuplicateException {
+        for (Quote quote : library.getAllQuotes()) {
+            if (quote.getPhrase().contains(newQuote.phrase)) {
+                throw new DuplicateException();
+            }
+        }
     }
 
     // EFFECTS: Library is checked for quotes; if none, then error message is printed and false is returned;
