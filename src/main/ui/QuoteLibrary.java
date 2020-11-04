@@ -148,7 +148,7 @@ public class QuoteLibrary {
             jsonWriter.open();
             jsonWriter.write(library);
             jsonWriter.close();
-            System.out.println("Saved your quotes to " + JSON_FILE_LOCATION);
+//            System.out.println("Saved your quotes to " + JSON_FILE_LOCATION);
         } catch (FileNotFoundException e) {
             System.out.println("Unable to write to file: " + JSON_FILE_LOCATION);
         }
@@ -159,7 +159,7 @@ public class QuoteLibrary {
     private void loadLibrary() {
         try {
             library = jsonReader.read();
-            System.out.println("Loaded your quotes from " + JSON_FILE_LOCATION);
+//            System.out.println("Loaded your quotes from " + JSON_FILE_LOCATION);
         } catch (IOException e) {
             System.out.println("Unable to read from file: " + JSON_FILE_LOCATION);
         }

@@ -21,7 +21,7 @@ public class JsonReader {
     }
 
     // EFFECTS: reads Library of Quotes from file and returns it;
-    //          throws IOException if an error occurs reading data from file
+    //          throws IOException if an error occurs while attempting to read data from file
     public Library read() throws IOException {
         String jsonData = readFile(jsonFileLocation);
         JSONObject jsonObject = new JSONObject(jsonData);
@@ -31,6 +31,16 @@ public class JsonReader {
     // EFFECTS: reads source file as string and returns it
     private String readFile(String jsonFileLocation) throws IOException {
         StringBuilder contentBuilder = new StringBuilder();
+        // Stream class: https://docs.oracle.com/javase/8/docs/api/java/util/stream/Stream.html
+            // forEach(Consumer<? super T> action)
+            // performs an action for each element of this stream
+        // Files class: https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/file/Files.html
+            // lines(Path path, Charset cs)
+            // reads all lines from a file as a Stream; unlike readAllLines, this method does not read all lines into
+            // a List, but instead populates lazily as the stream is consumed.
+        // Paths (note the "s" at end) class: https://docs.oracle.com/javase/7/docs/api/java/nio/file/Paths.html
+            // get(String)
+            // converts a path string to a Path object
         try (Stream<String> stream = Files.lines(Paths.get(jsonFileLocation), StandardCharsets.UTF_8)) {
             // (Parameters) -> {Body}
             // https://stackoverflow.com/questions/15146052/what-does-the-arrow-operator-do-in-java

@@ -8,11 +8,19 @@
         "author": "Test"
     },
     {
-        "phrase": "New",
+        "phrase": "New Quote",
         "author": "Anonymous"
     },
     {
         "phrase": "Another One!",
         "author": "Anonymous"
+    },
+    {
+        "phrase": "Hello",
+        "author": "World"
+    },
+    {
+        "phrase": "Test",
+        "author": "Oopsie"
     }
 ]}

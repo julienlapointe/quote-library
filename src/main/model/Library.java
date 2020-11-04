@@ -48,7 +48,7 @@ public class Library implements Writable {
         return json;
     }
 
-    // EFFECTS: puts each Quote from Library into a JSON array and returns it
+    // EFFECTS: puts each Quote from Library into the JSON array and returns it
     private JSONArray quotesToJson() {
         JSONArray jsonArray = new JSONArray();
         for (Quote quote : quotes) {

@@ -7,9 +7,12 @@
 //   Use a try-catch statement?
 // PHASE 2
 // - How to test a try-catch that is in my UI package? See DuplicateException
-// - Where do cite / credit other code? Ex. Persistence code
 // - As I add try-catch statements or validation for user input, I can remove REQUIRES clauses?
 // - Should "robust" code ideally have no REQUIRES clauses?
+// - Where do cite / credit other code? Ex. Persistence code
+// - Are we allowed to use a Swing library for UI?
+// PHASE 3
+// -
 
 package ui;
 
