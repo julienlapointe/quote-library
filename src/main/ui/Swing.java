@@ -12,20 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
-import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
@@ -107,6 +94,8 @@ public class Swing extends JPanel
         loadButton.setActionCommand(loadString);
         loadButton.addActionListener(new LoadListener());
 
+        JLabel appNameLabel = new JLabel("Quote Library");
+
 
 
         phraseField = new JTextField(20);
@@ -121,9 +110,15 @@ public class Swing extends JPanel
         String author = listModel.getElementAt(
                 list.getSelectedIndex()).toString();
 
+
+
         //Create a panel that uses BoxLayout.
         JPanel topButtonPane = new JPanel();
         topButtonPane.setLayout(new BoxLayout(topButtonPane, BoxLayout.LINE_AXIS));
+        topButtonPane.add(appNameLabel);
+        topButtonPane.add(Box.createHorizontalStrut(5));
+        topButtonPane.add(new JSeparator(SwingConstants.VERTICAL));
+        topButtonPane.add(Box.createHorizontalStrut(5));
         topButtonPane.add(saveButton);
         topButtonPane.add(Box.createHorizontalStrut(5));
         topButtonPane.add(new JSeparator(SwingConstants.VERTICAL));
