@@ -99,6 +99,16 @@ public class Swing extends JPanel
         editButton.setActionCommand(editString);
         editButton.addActionListener(new EditListener());
 
+        saveButton = new JButton(saveString);
+        saveButton.setActionCommand(saveString);
+        saveButton.addActionListener(new SaveListener());
+
+        loadButton = new JButton(loadString);
+        loadButton.setActionCommand(loadString);
+        loadButton.addActionListener(new LoadListener());
+
+
+
         phraseField = new JTextField(20);
         phraseField.addActionListener(addListener);
         phraseField.getDocument().addDocumentListener(addListener);
@@ -112,25 +122,39 @@ public class Swing extends JPanel
                 list.getSelectedIndex()).toString();
 
         //Create a panel that uses BoxLayout.
-        JPanel buttonPane = new JPanel();
-        buttonPane.setLayout(new BoxLayout(buttonPane,
-                BoxLayout.LINE_AXIS));
-        buttonPane.add(editButton);
-        buttonPane.add(Box.createHorizontalStrut(5));
-        buttonPane.add(new JSeparator(SwingConstants.VERTICAL));
-        buttonPane.add(Box.createHorizontalStrut(5));
-        buttonPane.add(removeButton);
-        buttonPane.add(Box.createHorizontalStrut(5));
-        buttonPane.add(new JSeparator(SwingConstants.VERTICAL));
-        buttonPane.add(Box.createHorizontalStrut(5));
-        buttonPane.add(phraseField);
-        buttonPane.add(authorField);
-        buttonPane.add(addButton);
-        buttonPane.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+        JPanel topButtonPane = new JPanel();
+        topButtonPane.setLayout(new BoxLayout(topButtonPane, BoxLayout.LINE_AXIS));
+        topButtonPane.add(saveButton);
+        topButtonPane.add(Box.createHorizontalStrut(5));
+        topButtonPane.add(new JSeparator(SwingConstants.VERTICAL));
+        topButtonPane.add(Box.createHorizontalStrut(5));
+        topButtonPane.add(loadButton);
+        topButtonPane.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
 
+        //Create a panel that uses BoxLayout.
+        JPanel bottomButtonPane = new JPanel();
+        bottomButtonPane.setLayout(new BoxLayout(bottomButtonPane, BoxLayout.LINE_AXIS));
+        bottomButtonPane.add(editButton);
+        bottomButtonPane.add(Box.createHorizontalStrut(5));
+        bottomButtonPane.add(new JSeparator(SwingConstants.VERTICAL));
+        bottomButtonPane.add(Box.createHorizontalStrut(5));
+        bottomButtonPane.add(removeButton);
+        bottomButtonPane.add(Box.createHorizontalStrut(5));
+        bottomButtonPane.add(new JSeparator(SwingConstants.VERTICAL));
+        bottomButtonPane.add(Box.createHorizontalStrut(5));
+        bottomButtonPane.add(phraseField);
+        bottomButtonPane.add(authorField);
+        bottomButtonPane.add(addButton);
+        bottomButtonPane.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+
+        add(topButtonPane, BorderLayout.PAGE_START);
         add(listScrollPane, BorderLayout.CENTER);
-        add(buttonPane, BorderLayout.PAGE_END);
+        add(bottomButtonPane, BorderLayout.PAGE_END);
     }
+
+    // ===============
+    // EVENT LISTENERS
+    // ===============
 
     class RemoveListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
@@ -178,6 +202,56 @@ public class Swing extends JPanel
 
             if (size == 0) { //Nobody's left, disable firing.
                 editButton.setEnabled(false);
+            } else { //Select an index.
+
+                if (index == listModel.getSize()) {
+                    //removed item in last position
+                    index--;
+                }
+
+                list.setSelectedIndex(index);
+                list.ensureIndexIsVisible(index);
+            }
+        }
+    }
+
+    class SaveListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            //This method can be called only if
+            //there's a valid selection
+            //so go ahead and remove whatever's selected.
+            int index = list.getSelectedIndex();
+            listModel.remove(index);
+
+            int size = listModel.getSize();
+
+            if (size == 0) { //Nobody's left, disable firing.
+                saveButton.setEnabled(false);
+            } else { //Select an index.
+
+                if (index == listModel.getSize()) {
+                    //removed item in last position
+                    index--;
+                }
+
+                list.setSelectedIndex(index);
+                list.ensureIndexIsVisible(index);
+            }
+        }
+    }
+
+    class LoadListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            //This method can be called only if
+            //there's a valid selection
+            //so go ahead and remove whatever's selected.
+            int index = list.getSelectedIndex();
+            listModel.remove(index);
+
+            int size = listModel.getSize();
+
+            if (size == 0) { //Nobody's left, disable firing.
+                loadButton.setEnabled(false);
             } else { //Select an index.
 
                 if (index == listModel.getSize()) {
@@ -297,10 +371,12 @@ public class Swing extends JPanel
             if (list.getSelectedIndex() == -1) {
 
                 removeButton.setEnabled(false);
+                editButton.setEnabled(false);
 
             } else {
 
                 removeButton.setEnabled(true);
+                editButton.setEnabled(true);
             }
         }
     }
