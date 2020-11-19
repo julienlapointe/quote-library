@@ -153,6 +153,14 @@ public class Swing extends JPanel
 
                 list.setSelectedIndex(index);
                 list.ensureIndexIsVisible(index);
+
+                // REQUIRES: 1 <= userInput <= total number of Quotes in Library
+                // MODIFIES: Quote and Library
+                // EFFECTS: userInput is captured;
+                //          userInput is used to find Quote to delete;
+                //          Quote is deleted from Library
+                library.removeQuote(library.getAllQuotes().get(index));
+                saveLibrary();
             }
         }
     }
@@ -201,6 +209,7 @@ public class Swing extends JPanel
             if (phrase.equals("") || alreadyInList(phrase)) {
                 // USE EXTERNAL SOUND FILE (.MP3?)
                 Toolkit.getDefaultToolkit().beep();
+                out.println("BEEP!");
                 phraseField.requestFocusInWindow();
                 phraseField.selectAll();
                 authorField.requestFocusInWindow();
