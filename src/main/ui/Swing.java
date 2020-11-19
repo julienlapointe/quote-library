@@ -194,17 +194,33 @@ public class Swing extends JPanel
 
         //Required by ActionListener.
         public void actionPerformed(ActionEvent e) {
-            String name = phraseField.getText();
+            String phrase = phraseField.getText();
             String author = authorField.getText();
 
             //User didn't type in a unique name...
-            if (name.equals("") || alreadyInList(name)) {
+            if (phrase.equals("") || alreadyInList(phrase)) {
+                // USE EXTERNAL SOUND FILE (.MP3?)
                 Toolkit.getDefaultToolkit().beep();
                 phraseField.requestFocusInWindow();
                 phraseField.selectAll();
                 authorField.requestFocusInWindow();
                 authorField.selectAll();
                 return;
+            }
+
+            // REQUIRES: phrase has a non-zero length
+            // MODIFIES: Quote and Library
+            // EFFECTS: User input is captured for phrase and author;
+            //          phrase and author are used to populate a new Quote;
+            //          the new Quote is added to the Library
+            Quote newQuote = new Quote(phrase, author);
+            try {
+                // checkDuplicate() throws DuplicateException()
+                checkDuplicate(newQuote);
+                library.addQuote(newQuote);
+                saveLibrary();
+            } catch (DuplicateException exception) {
+                out.println("Sorry! That quote already exists.");
             }
 
             int index = list.getSelectedIndex(); //get selected index
@@ -280,7 +296,7 @@ public class Swing extends JPanel
         }
     }
 
-    private static void createAndShowGUI() {
+    protected static void createAndShowGUI() {
         //Create and set up the window.
         JFrame frame = new JFrame("Quote Library");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -298,6 +314,20 @@ public class Swing extends JPanel
         //Display the window.
         frame.pack();
         frame.setVisible(true);
+    }
+
+    // ==============
+    // Helper methods
+    // ==============
+
+    // EFFECTS: newQuote phrase is checked for duplicates; if unique, then do nothing; if duplicate, then throw
+    //          DuplicateException
+    private void checkDuplicate(Quote newQuote) throws DuplicateException {
+        for (Quote quote : library.getAllQuotes()) {
+            if (quote.getPhrase().contains(newQuote.phrase)) {
+                throw new DuplicateException();
+            }
+        }
     }
 
     // ===========
@@ -327,14 +357,4 @@ public class Swing extends JPanel
         }
     }
 
-    // MOVE TO MAIN
-    public static void main(String[] args) {
-        //Schedule a job for the event-dispatching thread:
-        //creating and showing this application's GUI.
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                createAndShowGUI();
-            }
-        });
-    }
 }
