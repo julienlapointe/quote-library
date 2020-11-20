@@ -48,11 +48,11 @@ public class Swing extends JPanel
     private static final String saveString = "Save";
     private static final String loadString = "Load";
 
-    Icon addIcon = new ImageIcon(getClass().getResource("/Add16.gif"));
-    Icon removeIcon = new ImageIcon(getClass().getResource("/Remove16.gif"));
-    Icon editIcon = new ImageIcon(getClass().getResource("/Edit16.gif"));
-    Icon saveIcon = new ImageIcon(getClass().getResource("/Save16.gif"));
-    Icon loadIcon = new ImageIcon(getClass().getResource("/Load16.gif"));
+    Icon addIcon = new ImageIcon(getClass().getResource("/Add24.gif"));
+    Icon removeIcon = new ImageIcon(getClass().getResource("/Remove24.gif"));
+    Icon editIcon = new ImageIcon(getClass().getResource("/Edit24.gif"));
+    Icon saveIcon = new ImageIcon(getClass().getResource("/Save24.gif"));
+    Icon loadIcon = new ImageIcon(getClass().getResource("/Load24.gif"));
     Icon logoIcon = new ImageIcon(getClass().getResource("/Logo24.gif"));
 
     JLabel saveIconLabel = new JLabel(saveIcon);
