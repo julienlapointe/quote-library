@@ -1,10 +1,4 @@
-{"quotes": [
-    {
-        "phrase": "First dummy quote.",
-        "author": "Anonymous"
-    },
-    {
-        "phrase": "Second dummy quote.",
-        "author": "Anonymous"
-    }
-]}
+{"quotes": [{
+    "phrase": "Third dummy quote.",
+    "author": "Anonymous"
+}]}
