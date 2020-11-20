@@ -6,12 +6,17 @@ import model.Quote;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
-import java.awt.BorderLayout;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URL;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -31,17 +36,26 @@ public class Swing extends JPanel
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
 
+    private JButton addButton;
+    private JButton removeButton;
+    private JButton editButton;
+    private JButton saveButton;
+    private JButton loadButton;
+
     private static final String addString = "Add";
     private static final String removeString = "Remove";
     private static final String editString = "Edit";
     private static final String saveString = "Save";
     private static final String loadString = "Load";
 
-    private JButton addButton;
-    private JButton removeButton;
-    private JButton editButton;
-    private JButton saveButton;
-    private JButton loadButton;
+    Icon addIcon = new ImageIcon(getClass().getResource("/Add16.gif"));
+    Icon removeIcon = new ImageIcon(getClass().getResource("/Remove16.gif"));
+    Icon editIcon = new ImageIcon(getClass().getResource("/Edit16.gif"));
+    Icon saveIcon = new ImageIcon(getClass().getResource("/Save16.gif"));
+    Icon loadIcon = new ImageIcon(getClass().getResource("/Load16.gif"));
+    Icon logoIcon = new ImageIcon(getClass().getResource("/Logo24.gif"));
+
+    JLabel saveIconLabel = new JLabel(saveIcon);
 
     private JTextField phraseField;
     private JTextField authorField;
@@ -56,6 +70,9 @@ public class Swing extends JPanel
         library.addQuote(new Quote("First dummy quote.", "Anonymous"));
         library.addQuote(new Quote("Second dummy quote.", "Anonymous"));
         library.addQuote(new Quote("Third dummy quote.", "Anonymous"));
+
+        out.println(Swing.class.getResource("/Add16.gif"));
+        out.println(getClass().getResource("/Add16.gif"));
 
         loadLibrary();
 
@@ -72,74 +89,120 @@ public class Swing extends JPanel
         list.setVisibleRowCount(5);
         JScrollPane listScrollPane = new JScrollPane(list);
 
-        addButton = new JButton(addString);
+        addButton = new JButton(addString, addIcon);
+//        addButton.setSize(50, 30);
         AddListener addListener = new AddListener(addButton);
         addButton.setActionCommand(addString);
         addButton.addActionListener(addListener);
         addButton.setEnabled(false);
 
-        removeButton = new JButton(removeString);
+        removeButton = new JButton(removeString, removeIcon);
         removeButton.setActionCommand(removeString);
         removeButton.addActionListener(new RemoveListener());
 
-        editButton = new JButton(editString);
+        editButton = new JButton(editString, editIcon);
         editButton.setActionCommand(editString);
         editButton.addActionListener(new EditListener());
 
-        saveButton = new JButton(saveString);
+        saveButton = new JButton(saveString, saveIcon);
         saveButton.setActionCommand(saveString);
         saveButton.addActionListener(new SaveListener());
 
-        loadButton = new JButton(loadString);
+        loadButton = new JButton(loadString, loadIcon);
         loadButton.setActionCommand(loadString);
         loadButton.addActionListener(new LoadListener());
 
+        JLabel appLogoLabel = new JLabel(logoIcon);
         JLabel appNameLabel = new JLabel("Quote Library");
+        JLabel phraseLabel = new JLabel("Quote:");
+        JLabel authorLabel = new JLabel("Author:");
 
 
 
         phraseField = new JTextField(20);
+//        phraseField = new JTextField("Quote...", 20);
         phraseField.addActionListener(addListener);
         phraseField.getDocument().addDocumentListener(addListener);
         String name = listModel.getElementAt(
                 list.getSelectedIndex()).toString();
 
         authorField = new JTextField(20);
+//        authorField = new JTextField("Author...", 20);
         authorField.addActionListener(addListener);
         authorField.getDocument().addDocumentListener(addListener);
         String author = listModel.getElementAt(
                 list.getSelectedIndex()).toString();
 
+//        phraseField.addFocusListener(new FocusListener() {
+//            public void focusGained(FocusEvent e) {
+//                phraseField.setText("");
+//            }
+//
+//            public void focusLost(FocusEvent e) {
+//                phraseField.setText("Quote...");
+//            }
+//        });
+//
+//        authorField.addFocusListener(new FocusListener() {
+//            public void focusGained(FocusEvent e) {
+//                authorField.setText("");
+//            }
+//
+//            public void focusLost(FocusEvent e) {
+//                authorField.setText("Author...");
+//            }
+//        });
 
+
+
+        //Create a panel that uses BoxLayout.
+        JPanel logoPane = new JPanel();
+        logoPane.setLayout(new BoxLayout(logoPane, BoxLayout.LINE_AXIS));
+        logoPane.add(appLogoLabel);
+        logoPane.add(appNameLabel);
+
+        //Create a panel that uses BoxLayout.
+        JPanel addButtonPane = new JPanel();
+        addButtonPane.setLayout(new BoxLayout(addButtonPane, BoxLayout.LINE_AXIS));
+        addButtonPane.add(phraseLabel);
+        addButtonPane.add(phraseField);
+        addButtonPane.add(Box.createHorizontalStrut(10));
+        addButtonPane.add(authorLabel);
+        addButtonPane.add(authorField);
+        addButtonPane.add(Box.createHorizontalStrut(10));
+        addButtonPane.add(addButton);
+
+        //Create a panel that uses BoxLayout.
+        JPanel editAndRemoveButtonPane = new JPanel();
+//        editAndRemoveButtonPane.setLayout(new BoxLayout(editAndRemoveButtonPane, BoxLayout.LINE_AXIS));
+        editAndRemoveButtonPane.add(editButton);
+        editAndRemoveButtonPane.add(Box.createHorizontalStrut(5));
+        editAndRemoveButtonPane.add(new JSeparator(SwingConstants.VERTICAL));
+        editAndRemoveButtonPane.add(Box.createHorizontalStrut(5));
+        editAndRemoveButtonPane.add(removeButton);
+
+        //Create a panel that uses BoxLayout.
+        JPanel loadAndSaveButtonPane = new JPanel();
+//        loadAndSaveButtonPane.setLayout(new BoxLayout(loadAndSaveButtonPane, BoxLayout.LINE_AXIS));
+        loadAndSaveButtonPane.add(saveButton);
+        loadAndSaveButtonPane.add(Box.createHorizontalStrut(5));
+        loadAndSaveButtonPane.add(new JSeparator(SwingConstants.VERTICAL));
+        loadAndSaveButtonPane.add(Box.createHorizontalStrut(5));
+        loadAndSaveButtonPane.add(loadButton);
 
         //Create a panel that uses BoxLayout.
         JPanel topButtonPane = new JPanel();
         topButtonPane.setLayout(new BoxLayout(topButtonPane, BoxLayout.LINE_AXIS));
-        topButtonPane.add(appNameLabel);
-        topButtonPane.add(Box.createHorizontalStrut(5));
-        topButtonPane.add(new JSeparator(SwingConstants.VERTICAL));
-        topButtonPane.add(Box.createHorizontalStrut(5));
-        topButtonPane.add(saveButton);
-        topButtonPane.add(Box.createHorizontalStrut(5));
-        topButtonPane.add(new JSeparator(SwingConstants.VERTICAL));
-        topButtonPane.add(Box.createHorizontalStrut(5));
-        topButtonPane.add(loadButton);
+        topButtonPane.add(logoPane);
+        topButtonPane.add(Box.createHorizontalStrut(60));
+        topButtonPane.add(addButtonPane);
         topButtonPane.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
 
         //Create a panel that uses BoxLayout.
         JPanel bottomButtonPane = new JPanel();
         bottomButtonPane.setLayout(new BoxLayout(bottomButtonPane, BoxLayout.LINE_AXIS));
-        bottomButtonPane.add(editButton);
-        bottomButtonPane.add(Box.createHorizontalStrut(5));
-        bottomButtonPane.add(new JSeparator(SwingConstants.VERTICAL));
-        bottomButtonPane.add(Box.createHorizontalStrut(5));
-        bottomButtonPane.add(removeButton);
-        bottomButtonPane.add(Box.createHorizontalStrut(5));
-        bottomButtonPane.add(new JSeparator(SwingConstants.VERTICAL));
-        bottomButtonPane.add(Box.createHorizontalStrut(5));
-        bottomButtonPane.add(phraseField);
-        bottomButtonPane.add(authorField);
-        bottomButtonPane.add(addButton);
+        bottomButtonPane.add(editAndRemoveButtonPane);
+        bottomButtonPane.add(loadAndSaveButtonPane);
         bottomButtonPane.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
 
         add(topButtonPane, BorderLayout.PAGE_START);
