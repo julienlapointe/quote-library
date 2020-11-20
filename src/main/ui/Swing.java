@@ -1,5 +1,6 @@
 package ui;
 
+// Imports
 import exceptions.DuplicateException;
 import model.Library;
 import model.Quote;
@@ -21,16 +22,21 @@ import javax.swing.event.ListSelectionListener;
 
 import static java.lang.System.out;
 
+// Represents the Swing UI
 public class Swing extends JPanel
                    implements ListSelectionListener {
 
-    private JList list;
-    private DefaultListModel listModel;
-
+    // Model Fields
     Library library;
+
+    // Persistence Fields
     private static final String JSON_FILE_LOCATION = "./data/quotes.json";
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
+
+    // List, TextField, and Button Fields
+    private JList list;
+    private DefaultListModel listModel;
 
     private JTextField phraseField;
     private JTextField authorField;
@@ -54,56 +60,52 @@ public class Swing extends JPanel
     Icon saveIcon = new ImageIcon(getClass().getResource("/Save.gif"));
     Icon loadIcon = new ImageIcon(getClass().getResource("/Load.gif"));
 
+    // String Manipulation Fields
     private String phrase = "";
     private String author = "";
     private String newQuote = "";
     private String editedQuote = "";
 
-    public Swing() throws FileNotFoundException {
+    // Constructor
+    // EFFECTS: Library, JsonWriter, JsonReader, and DefaultListModel are initialized;
+    //          button panels are added to Swing UI using BorderLayout
+    public Swing() {
         super(new BorderLayout());
 
+        // Initialize model object (a Library of Quotes)
         library = new Library();
+        //Initialize persistence objects (write and read)
         jsonWriter = new JsonWriter(JSON_FILE_LOCATION);
         jsonReader = new JsonReader(JSON_FILE_LOCATION);
-
+        // Initialize Swing list object
         listModel = new DefaultListModel();
 
-        JLabel appLogoLabel = new JLabel(logoIcon);
-        JLabel appNameLabel = new JLabel("Quote Library");
-        JLabel phraseLabel = new JLabel("Quote:");
-        JLabel authorLabel = new JLabel("Author:");
-
+        // Add dummy quotes until quotes are loaded from file
         addDummyQuotes();
 
-        JScrollPane listScrollPane = createList();
-        JPanel logoPane = createLogo(appLogoLabel, appNameLabel);
-        JPanel addButtonPane = createAddTextFieldsAndButton(phraseLabel, authorLabel);
-        JPanel loadAndSaveButtonPane = createSaveAndLoadButtons();
-        JPanel editAndRemoveButtonPane = createEditAndRemoveButtons();
+        // Assemble components into panels
+        JScrollPane listScrollPane = getListPane();
+        JPanel logoPanel = getLogoPanel();
+        JPanel addButtonPanel = getAddTextFieldsAndButtonPanel();
+        JPanel loadAndSaveButtonPanel = getSaveAndLoadButtonPanel();
+        JPanel editAndRemoveButtonPanel = getEditAndRemoveButtonPanel();
 
-        JPanel topButtonPane = createTopPanel(logoPane, addButtonPane);
-        JPanel bottomButtonPane = createBottomPanel(loadAndSaveButtonPane, editAndRemoveButtonPane);
+        // Assemble panels into "panel groups"
+        JPanel topButtonPanel = getTopPanel(logoPanel, addButtonPanel);
+        JPanel bottomButtonPanel = getBottomPanel(loadAndSaveButtonPanel, editAndRemoveButtonPanel);
 
-        add(topButtonPane, BorderLayout.PAGE_START);
+        // Place "panel groups" onto BorderLayout
+        add(topButtonPanel, BorderLayout.PAGE_START);
         add(listScrollPane, BorderLayout.CENTER);
-        add(bottomButtonPane, BorderLayout.PAGE_END);
+        add(bottomButtonPanel, BorderLayout.PAGE_END);
     }
 
     // ==============
     // HELPER METHODS
     // ==============
 
-    private JScrollPane createList() {
-        //Create the list and put it in a scroll pane.
-        list = new JList(listModel);
-        list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        list.setSelectedIndex(0);
-        list.addListSelectionListener(this);
-//        list.setVisibleRowCount(5);
-        JScrollPane listScrollPane = new JScrollPane(list);
-        return listScrollPane;
-    }
-
+    // MODIFIES: library, listModel
+    // EFFECTS: Add dummy quotes to library and listModel
     private void addDummyQuotes() {
         library.addQuote(new Quote("First dummy quote.", "Anonymous"));
         library.addQuote(new Quote("Second dummy quote.", "Anonymous"));
@@ -113,8 +115,25 @@ public class Swing extends JPanel
         }
     }
 
-    private JPanel createLogo(JLabel appLogoLabel, JLabel appNameLabel) {
+    // ===========================
+    // SWING COMPONENTS AND PANELS
+    // ===========================
+
+
+    private JScrollPane getListPane() {
+        //Create the list and put it in a scroll pane.
+        list = new JList(listModel);
+        list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        list.setSelectedIndex(0);
+        list.addListSelectionListener(this);
+        JScrollPane listScrollPane = new JScrollPane(list);
+        return listScrollPane;
+    }
+
+    private JPanel getLogoPanel() {
         //Create a panel that uses BoxLayout.
+        JLabel appLogoLabel = new JLabel(logoIcon);
+        JLabel appNameLabel = new JLabel("Quote Library");
         JPanel logoPane = new JPanel();
         logoPane.setLayout(new BoxLayout(logoPane, BoxLayout.LINE_AXIS));
         logoPane.add(appLogoLabel);
@@ -122,7 +141,10 @@ public class Swing extends JPanel
         return logoPane;
     }
 
-    private JPanel createAddTextFieldsAndButton(JLabel phraseLabel, JLabel authorLabel) {
+    private JPanel getAddTextFieldsAndButtonPanel() {
+        JLabel phraseLabel = new JLabel("Quote:");
+        JLabel authorLabel = new JLabel("Author:");
+
         addButton = new JButton(addString, addIcon);
 //        addButton.setSize(50, 30);
         AddListener addListener = new AddListener(addButton);
@@ -175,7 +197,7 @@ public class Swing extends JPanel
         return addButtonPane;
     }
 
-    private JPanel createEditAndRemoveButtons() {
+    private JPanel getEditAndRemoveButtonPanel() {
         editButton = new JButton(editString, editIcon);
         editButton.setActionCommand(editString);
         editButton.addActionListener(new EditListener());
@@ -195,7 +217,7 @@ public class Swing extends JPanel
         return editAndRemoveButtonPane;
     }
 
-    private JPanel createSaveAndLoadButtons() {
+    private JPanel getSaveAndLoadButtonPanel() {
         saveButton = new JButton(saveString, saveIcon);
         saveButton.setActionCommand(saveString);
         saveButton.addActionListener(new SaveListener());
@@ -215,7 +237,7 @@ public class Swing extends JPanel
         return loadAndSaveButtonPane;
     }
 
-    private JPanel createTopPanel(JPanel logoPane, JPanel addButtonPane) {
+    private JPanel getTopPanel(JPanel logoPane, JPanel addButtonPane) {
         //Create a panel that uses BoxLayout.
         JPanel topButtonPane = new JPanel();
         topButtonPane.setLayout(new BoxLayout(topButtonPane, BoxLayout.LINE_AXIS));
@@ -226,7 +248,7 @@ public class Swing extends JPanel
         return topButtonPane;
     }
 
-    private JPanel createBottomPanel(JPanel loadAndSaveButtonPane, JPanel editAndRemoveButtonPane) {
+    private JPanel getBottomPanel(JPanel loadAndSaveButtonPane, JPanel editAndRemoveButtonPane) {
         //Create a panel that uses BoxLayout.
         JPanel bottomButtonPane = new JPanel();
         bottomButtonPane.setLayout(new BoxLayout(bottomButtonPane, BoxLayout.LINE_AXIS));
@@ -590,11 +612,7 @@ public class Swing extends JPanel
 
         //Create and set up the content pane.
         JComponent newContentPane = null;
-        try {
-            newContentPane = new Swing();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        newContentPane = new Swing();
         newContentPane.setOpaque(true); //content panes must be opaque
         frame.setContentPane(newContentPane);
 

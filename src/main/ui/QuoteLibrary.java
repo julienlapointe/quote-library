@@ -15,6 +15,7 @@ import static java.lang.System.out;
 
 // Represents the UI for the Quote and Library classes in the "model" package
 public class QuoteLibrary {
+
     // Fields
     Library library;
     Scanner in = new Scanner(System.in);
