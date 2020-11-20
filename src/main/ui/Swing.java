@@ -218,7 +218,7 @@ public class Swing extends JPanel
             //there's a valid selection
             //so go ahead and remove whatever's selected.
             int index = list.getSelectedIndex();
-            listModel.remove(index);
+            listModel.removeElementAt(index);
 
             int size = listModel.getSize();
 
@@ -265,21 +265,29 @@ public class Swing extends JPanel
     // COPIED REMOVELISTENER IMPLEMENTATION
     class EditListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
+            String phrase = "";
+            String author = "";
+            String editedQuote = "";
+
+            int index = list.getSelectedIndex();
+            String string = (String) list.getModel().getElementAt(index);
+            String[] splitStrings = string.split(" ~ ");
+            phrase = splitStrings[0];
+            author = splitStrings[1];
 
             JPanel myPanel = new JPanel();
-            JTextField field1 = new JTextField(10);
-            JTextField field2 = new JTextField(10);
-            myPanel.add(field1);
-            myPanel.add(field2);
+            JTextField phraseField = new JTextField(phrase,20);
+            JTextField authorField = new JTextField(author,20);
+            myPanel.add(phraseField);
+            myPanel.add(authorField);
             JOptionPane.showMessageDialog(null, myPanel);
-            System.out.println(field1.getText() + field2.getText());
+
+            editedQuote = phraseField.getText() + " ~ " + authorField.getText();
+            listModel.setElementAt(editedQuote, index);
 
             //This method can be called only if
             //there's a valid selection
             //so go ahead and remove whatever's selected.
-            int index = list.getSelectedIndex();
-            listModel.remove(index);
-
             int size = listModel.getSize();
 
             if (size == 0) { //Nobody's left, disable firing.
