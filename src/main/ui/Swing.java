@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
+import javax.sound.sampled.*;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -238,8 +239,25 @@ public class Swing extends JPanel
                 // EFFECTS: userInput is captured;
                 //          userInput is used to find Quote to delete;
                 //          Quote is deleted from Library
-                library.removeQuote(library.getAllQuotes().get(index));
+//                library.removeQuote(library.getAllQuotes().get(index));
 //                saveLibrary();
+            }
+
+            try {
+                // Open an audio input stream.
+                URL url = this.getClass().getClassLoader().getResource("Remove.wav");
+                AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
+                // Get a sound clip resource.
+                Clip clip = AudioSystem.getClip();
+                // Open audio clip and load samples from the audio input stream.
+                clip.open(audioIn);
+                clip.start();
+            } catch (UnsupportedAudioFileException exception) {
+                exception.printStackTrace();
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            } catch (LineUnavailableException exception) {
+                exception.printStackTrace();
             }
         }
     }
@@ -309,11 +327,28 @@ public class Swing extends JPanel
         public void actionPerformed(ActionEvent e) {
             String phrase = phraseField.getText();
             String author = authorField.getText();
-
+            String phraseAndAuthor = phrase  + " ~ " + author;
             //User didn't type in a unique name...
-            if (phrase.equals("") || alreadyInList(phrase)) {
+            if (phrase.equals("") || alreadyInList(phraseAndAuthor)) {
                 // USE EXTERNAL SOUND FILE (.MP3?)
-                Toolkit.getDefaultToolkit().beep();
+
+                try {
+                    // Open an audio input stream.
+                    URL url = this.getClass().getClassLoader().getResource("Beep.wav");
+                    AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
+                    // Get a sound clip resource.
+                    Clip clip = AudioSystem.getClip();
+                    // Open audio clip and load samples from the audio input stream.
+                    clip.open(audioIn);
+                    clip.start();
+                } catch (UnsupportedAudioFileException exception) {
+                    exception.printStackTrace();
+                } catch (IOException exception) {
+                    exception.printStackTrace();
+                } catch (LineUnavailableException exception) {
+                    exception.printStackTrace();
+                }
+
                 out.println("BEEP!");
                 phraseField.requestFocusInWindow();
                 phraseField.selectAll();
@@ -327,15 +362,15 @@ public class Swing extends JPanel
             // EFFECTS: User input is captured for phrase and author;
             //          phrase and author are used to populate a new Quote;
             //          the new Quote is added to the Library
-            Quote newQuote = new Quote(phrase, author);
-            try {
-                // checkDuplicate() throws DuplicateException()
-                checkDuplicate(newQuote);
-                library.addQuote(newQuote);
-//                saveLibrary();
-            } catch (DuplicateException exception) {
-                out.println("Sorry! That quote already exists.");
-            }
+//            Quote newQuote = new Quote(phrase, author);
+//            try {
+//                // checkDuplicate() throws DuplicateException()
+//                checkDuplicate(newQuote);
+//                library.addQuote(newQuote);
+////                saveLibrary();
+//            } catch (DuplicateException exception) {
+//                out.println("Sorry! That quote already exists.");
+//            }
 
             int index = list.getSelectedIndex(); //get selected index
             if (index == -1) { //no selection, so insert at beginning
@@ -356,6 +391,23 @@ public class Swing extends JPanel
             //Select the new item and make it visible.
             list.setSelectedIndex(index);
             list.ensureIndexIsVisible(index);
+
+            try {
+                // Open an audio input stream.
+                URL url = this.getClass().getClassLoader().getResource("Success.wav");
+                AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
+                // Get a sound clip resource.
+                Clip clip = AudioSystem.getClip();
+                // Open audio clip and load samples from the audio input stream.
+                clip.open(audioIn);
+                clip.start();
+            } catch (UnsupportedAudioFileException exception) {
+                exception.printStackTrace();
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            } catch (LineUnavailableException exception) {
+                exception.printStackTrace();
+            }
         }
 
         protected boolean alreadyInList(String name) {
