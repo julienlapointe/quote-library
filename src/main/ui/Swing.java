@@ -51,12 +51,12 @@ public class Swing extends JPanel
     private static final String saveString = "Save";
     private static final String loadString = "Load";
 
-    Icon addIcon = new ImageIcon(getClass().getResource("/Add24.gif"));
-    Icon removeIcon = new ImageIcon(getClass().getResource("/Remove24.gif"));
-    Icon editIcon = new ImageIcon(getClass().getResource("/Edit24.gif"));
-    Icon saveIcon = new ImageIcon(getClass().getResource("/Save24.gif"));
-    Icon loadIcon = new ImageIcon(getClass().getResource("/Load24.gif"));
-    Icon logoIcon = new ImageIcon(getClass().getResource("/Logo24.gif"));
+    Icon addIcon = new ImageIcon(getClass().getResource("/Add.gif"));
+    Icon removeIcon = new ImageIcon(getClass().getResource("/Remove.gif"));
+    Icon editIcon = new ImageIcon(getClass().getResource("/Edit.gif"));
+    Icon saveIcon = new ImageIcon(getClass().getResource("/Save.gif"));
+    Icon loadIcon = new ImageIcon(getClass().getResource("/Load.gif"));
+    Icon logoIcon = new ImageIcon(getClass().getResource("/Logo.gif"));
 
     JLabel saveIconLabel = new JLabel(saveIcon);
 
@@ -265,6 +265,24 @@ public class Swing extends JPanel
     // COPIED REMOVELISTENER IMPLEMENTATION
     class EditListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
+
+            try {
+                // Open an audio input stream.
+                URL url = this.getClass().getClassLoader().getResource("Edit.wav");
+                AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
+                // Get a sound clip resource.
+                Clip clip = AudioSystem.getClip();
+                // Open audio clip and load samples from the audio input stream.
+                clip.open(audioIn);
+                clip.start();
+            } catch (UnsupportedAudioFileException exception) {
+                exception.printStackTrace();
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            } catch (LineUnavailableException exception) {
+                exception.printStackTrace();
+            }
+
             String phrase = "";
             String author = "";
             String editedQuote = "";
@@ -318,6 +336,23 @@ public class Swing extends JPanel
                 library.addQuote(new Quote(phrase, author));
             }
             saveLibrary();
+
+            try {
+                // Open an audio input stream.
+                URL url = this.getClass().getClassLoader().getResource("Save.wav");
+                AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
+                // Get a sound clip resource.
+                Clip clip = AudioSystem.getClip();
+                // Open audio clip and load samples from the audio input stream.
+                clip.open(audioIn);
+                clip.start();
+            } catch (UnsupportedAudioFileException exception) {
+                exception.printStackTrace();
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            } catch (LineUnavailableException exception) {
+                exception.printStackTrace();
+            }
         }
     }
 
@@ -327,6 +362,23 @@ public class Swing extends JPanel
             listModel.removeAllElements();
             for (Quote quote : library.getAllQuotes()) {
                 listModel.addElement(quote.getPhrase() + " ~ " + quote.getAuthor());
+            }
+
+            try {
+                // Open an audio input stream.
+                URL url = this.getClass().getClassLoader().getResource("Load.wav");
+                AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
+                // Get a sound clip resource.
+                Clip clip = AudioSystem.getClip();
+                // Open audio clip and load samples from the audio input stream.
+                clip.open(audioIn);
+                clip.start();
+            } catch (UnsupportedAudioFileException exception) {
+                exception.printStackTrace();
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            } catch (LineUnavailableException exception) {
+                exception.printStackTrace();
             }
         }
     }
@@ -411,7 +463,7 @@ public class Swing extends JPanel
 
             try {
                 // Open an audio input stream.
-                URL url = this.getClass().getClassLoader().getResource("Success.wav");
+                URL url = this.getClass().getClassLoader().getResource("Add.wav");
                 AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
                 // Get a sound clip resource.
                 Clip clip = AudioSystem.getClip();

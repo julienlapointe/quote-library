@@ -1,10 +1,10 @@
 {"quotes": [
     {
-        "phrase": "Blah",
-        "author": "Blah"
+        "phrase": "First dummy quote.",
+        "author": "Anonymous"
     },
     {
-        "phrase": "TEst",
-        "author": "TEst"
+        "phrase": "Second dummy quote.",
+        "author": "Anonymous"
     }
 ]}
