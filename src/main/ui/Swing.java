@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -23,6 +24,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import static java.lang.System.*;
 import static java.lang.System.out;
 
 public class Swing extends JPanel
@@ -71,11 +73,6 @@ public class Swing extends JPanel
         library.addQuote(new Quote("Second dummy quote.", "Anonymous"));
         library.addQuote(new Quote("Third dummy quote.", "Anonymous"));
 
-        out.println(Swing.class.getResource("/Add16.gif"));
-        out.println(getClass().getResource("/Add16.gif"));
-
-        loadLibrary();
-
         listModel = new DefaultListModel();
         for (Quote quote : library.getAllQuotes()) {
             listModel.addElement(quote.getPhrase() + " ~ " + quote.getAuthor());
@@ -86,7 +83,7 @@ public class Swing extends JPanel
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list.setSelectedIndex(0);
         list.addListSelectionListener(this);
-        list.setVisibleRowCount(5);
+//        list.setVisibleRowCount(5);
         JScrollPane listScrollPane = new JScrollPane(list);
 
         addButton = new JButton(addString, addIcon);
@@ -242,7 +239,7 @@ public class Swing extends JPanel
                 //          userInput is used to find Quote to delete;
                 //          Quote is deleted from Library
                 library.removeQuote(library.getAllQuotes().get(index));
-                saveLibrary();
+//                saveLibrary();
             }
         }
     }
@@ -275,50 +272,26 @@ public class Swing extends JPanel
 
     class SaveListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            //This method can be called only if
-            //there's a valid selection
-            //so go ahead and remove whatever's selected.
-            int index = list.getSelectedIndex();
-            listModel.remove(index);
-
-            int size = listModel.getSize();
-
-            if (size == 0) { //Nobody's left, disable firing.
-                saveButton.setEnabled(false);
-            } else { //Select an index.
-
-                if (index == listModel.getSize()) {
-                    //removed item in last position
-                    index--;
-                }
-
-                list.setSelectedIndex(index);
-                list.ensureIndexIsVisible(index);
+            library.removeAllQuotes();
+            String phrase = "";
+            String author = "";
+            for (int i = 0; i < list.getModel().getSize(); i++) {
+                String string = (String) list.getModel().getElementAt(i);
+                String[] splitStrings = string.split(" ~ ");
+                phrase = splitStrings[0];
+                author = splitStrings[1];
+                library.addQuote(new Quote(phrase, author));
             }
+            saveLibrary();
         }
     }
 
     class LoadListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            //This method can be called only if
-            //there's a valid selection
-            //so go ahead and remove whatever's selected.
-            int index = list.getSelectedIndex();
-            listModel.remove(index);
-
-            int size = listModel.getSize();
-
-            if (size == 0) { //Nobody's left, disable firing.
-                loadButton.setEnabled(false);
-            } else { //Select an index.
-
-                if (index == listModel.getSize()) {
-                    //removed item in last position
-                    index--;
-                }
-
-                list.setSelectedIndex(index);
-                list.ensureIndexIsVisible(index);
+            loadLibrary();
+            listModel.removeAllElements();
+            for (Quote quote : library.getAllQuotes()) {
+                listModel.addElement(quote.getPhrase() + " ~ " + quote.getAuthor());
             }
         }
     }
@@ -359,7 +332,7 @@ public class Swing extends JPanel
                 // checkDuplicate() throws DuplicateException()
                 checkDuplicate(newQuote);
                 library.addQuote(newQuote);
-                saveLibrary();
+//                saveLibrary();
             } catch (DuplicateException exception) {
                 out.println("Sorry! That quote already exists.");
             }
@@ -483,9 +456,9 @@ public class Swing extends JPanel
             jsonWriter.open();
             jsonWriter.write(library);
             jsonWriter.close();
-            System.out.println("Saved your quotes to " + JSON_FILE_LOCATION);
+            out.println("Saved your quotes to " + JSON_FILE_LOCATION);
         } catch (FileNotFoundException e) {
-            System.out.println("Unable to write to file: " + JSON_FILE_LOCATION);
+            out.println("Unable to write to file: " + JSON_FILE_LOCATION);
         }
     }
 
@@ -494,9 +467,9 @@ public class Swing extends JPanel
     private void loadLibrary() {
         try {
             library = jsonReader.read();
-            System.out.println("Loaded your quotes from " + JSON_FILE_LOCATION);
+            out.println("Loaded your quotes from " + JSON_FILE_LOCATION);
         } catch (IOException e) {
-            System.out.println("Unable to read from file: " + JSON_FILE_LOCATION);
+            out.println("Unable to read from file: " + JSON_FILE_LOCATION);
         }
     }
 

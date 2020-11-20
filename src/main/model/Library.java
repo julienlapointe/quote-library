@@ -29,6 +29,12 @@ public class Library implements Writable {
         quotes.remove(quote);
     }
 
+    // MODIFIES: this
+    // EFFECTS: All Quotes are removed from Library of Quotes
+    public void removeAllQuotes() {
+        quotes.clear();
+    }
+
     // EFFECTS: returns an ArrayList of all Quotes in Library
     public ArrayList<Quote> getAllQuotes() {
         return quotes;

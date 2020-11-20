@@ -1,14 +1,18 @@
 {"quotes": [
     {
-        "phrase": "Blah",
-        "author": "Blah"
+        "phrase": "TEst",
+        "author": "TEst"
     },
     {
-        "phrase": "Tester",
-        "author": "Testy"
+        "phrase": "First dummy quote.",
+        "author": "Anonymous"
     },
     {
-        "phrase": "test",
-        "author": "test"
+        "phrase": "Second dummy quote.",
+        "author": "Anonymous"
+    },
+    {
+        "phrase": "fdfd",
+        "author": "fdfdf"
     }
 ]}
