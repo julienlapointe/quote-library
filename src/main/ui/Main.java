@@ -16,9 +16,7 @@
 
 package ui;
 
-import java.io.FileNotFoundException;
-
-import static ui.Swing.createAndShowGUI;
+import static ui.Swing.getGUI;
 
 // Represents an instance of the QuoteLibrary app
 public class Main {
@@ -27,7 +25,7 @@ public class Main {
         //creating and showing this application's GUI.
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                createAndShowGUI();
+                getGUI();
             }
         });
     }

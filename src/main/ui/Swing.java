@@ -105,7 +105,7 @@ public class Swing extends JPanel
     // ==============
 
     // MODIFIES: library, listModel
-    // EFFECTS: Add dummy quotes to library and listModel
+    // EFFECTS: Dummy quotes are added to library and listModel
     private void addDummyQuotes() {
         library.addQuote(new Quote("First dummy quote.", "Anonymous"));
         library.addQuote(new Quote("Second dummy quote.", "Anonymous"));
@@ -115,13 +115,13 @@ public class Swing extends JPanel
         }
     }
 
-    // ===========================
-    // SWING COMPONENTS AND PANELS
-    // ===========================
+    // =====================
+    // COMPONENTS AND PANELS
+    // =====================
 
-
+    // MODIFIES: list, listScrollPane
+    // EFFECTS: JList is created and configured; JScrollPane is created; JList is added to JScrollPane
     private JScrollPane getListPane() {
-        //Create the list and put it in a scroll pane.
         list = new JList(listModel);
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list.setSelectedIndex(0);
@@ -130,73 +130,57 @@ public class Swing extends JPanel
         return listScrollPane;
     }
 
+    // MODIFIES: appLogoLabel, appNameLabel, logoPane
+    // EFFECTS: JPanel is created that uses BoxLayout; JLabels are created for app name and logo;
+    //          JLabels are added to JPanel; JPanel is returned
     private JPanel getLogoPanel() {
         //Create a panel that uses BoxLayout.
         JLabel appLogoLabel = new JLabel(logoIcon);
         JLabel appNameLabel = new JLabel("Quote Library");
-        JPanel logoPane = new JPanel();
-        logoPane.setLayout(new BoxLayout(logoPane, BoxLayout.LINE_AXIS));
-        logoPane.add(appLogoLabel);
-        logoPane.add(appNameLabel);
-        return logoPane;
+        JPanel logoPanel = new JPanel();
+        logoPanel.setLayout(new BoxLayout(logoPanel, BoxLayout.LINE_AXIS));
+        logoPanel.add(appLogoLabel);
+        logoPanel.add(appNameLabel);
+        return logoPanel;
     }
 
+    // MODIFIES: phraseLabel, authorLabel, addButton, addListener, phraseField, authorField, addButtonPane
+    // EFFECTS: JLabels are created to indicate purpose of each JTextField; JButton is created;
+    //          AddListener event listener is created; JTextFields are created to accept user input;
+    //          JPanel is created and components are placed using BoxLayout; JPanel is returned
     private JPanel getAddTextFieldsAndButtonPanel() {
         JLabel phraseLabel = new JLabel("Quote:");
         JLabel authorLabel = new JLabel("Author:");
 
         addButton = new JButton(addString, addIcon);
-//        addButton.setSize(50, 30);
         AddListener addListener = new AddListener(addButton);
         addButton.setActionCommand(addString);
         addButton.addActionListener(addListener);
         addButton.setEnabled(false);
 
         phraseField = new JTextField(20);
-//        phraseField = new JTextField("Quote...", 20);
         phraseField.addActionListener(addListener);
         phraseField.getDocument().addDocumentListener(addListener);
-        String name = listModel.getElementAt(list.getSelectedIndex()).toString();
 
         authorField = new JTextField(20);
-//        authorField = new JTextField("Author...", 20);
         authorField.addActionListener(addListener);
         authorField.getDocument().addDocumentListener(addListener);
-        String author = listModel.getElementAt(list.getSelectedIndex()).toString();
 
-//        phraseField.addFocusListener(new FocusListener() {
-//            public void focusGained(FocusEvent e) {
-//                phraseField.setText("");
-//            }
-//
-//            public void focusLost(FocusEvent e) {
-//                phraseField.setText("Quote...");
-//            }
-//        });
-//
-//        authorField.addFocusListener(new FocusListener() {
-//            public void focusGained(FocusEvent e) {
-//                authorField.setText("");
-//            }
-//
-//            public void focusLost(FocusEvent e) {
-//                authorField.setText("Author...");
-//            }
-//        });
-
-        //Create a panel that uses BoxLayout.
-        JPanel addButtonPane = new JPanel();
-        addButtonPane.setLayout(new BoxLayout(addButtonPane, BoxLayout.LINE_AXIS));
-        addButtonPane.add(phraseLabel);
-        addButtonPane.add(phraseField);
-        addButtonPane.add(Box.createHorizontalStrut(10));
-        addButtonPane.add(authorLabel);
-        addButtonPane.add(authorField);
-        addButtonPane.add(Box.createHorizontalStrut(10));
-        addButtonPane.add(addButton);
-        return addButtonPane;
+        JPanel addButtonPanel = new JPanel();
+        addButtonPanel.setLayout(new BoxLayout(addButtonPanel, BoxLayout.LINE_AXIS));
+        addButtonPanel.add(phraseLabel);
+        addButtonPanel.add(phraseField);
+        addButtonPanel.add(Box.createHorizontalStrut(10));
+        addButtonPanel.add(authorLabel);
+        addButtonPanel.add(authorField);
+        addButtonPanel.add(Box.createHorizontalStrut(10));
+        addButtonPanel.add(addButton);
+        return addButtonPanel;
     }
 
+    // MODIFIES: editButton, removeButton, editAndRemoveButtonPanel
+    // EFFECTS: JButtons are created and configured for "Edit" and "Remove" features;
+    //          JPanel is created and JButtons are added to it; JPanel is returned
     private JPanel getEditAndRemoveButtonPanel() {
         editButton = new JButton(editString, editIcon);
         editButton.setActionCommand(editString);
@@ -206,17 +190,18 @@ public class Swing extends JPanel
         removeButton.setActionCommand(removeString);
         removeButton.addActionListener(new RemoveListener());
 
-        //Create a panel that uses BoxLayout.
-        JPanel editAndRemoveButtonPane = new JPanel();
-//        editAndRemoveButtonPane.setLayout(new BoxLayout(editAndRemoveButtonPane, BoxLayout.LINE_AXIS));
-        editAndRemoveButtonPane.add(editButton);
-        editAndRemoveButtonPane.add(Box.createHorizontalStrut(5));
-        editAndRemoveButtonPane.add(new JSeparator(SwingConstants.VERTICAL));
-        editAndRemoveButtonPane.add(Box.createHorizontalStrut(5));
-        editAndRemoveButtonPane.add(removeButton);
-        return editAndRemoveButtonPane;
+        JPanel editAndRemoveButtonPanel = new JPanel();
+        editAndRemoveButtonPanel.add(editButton);
+        editAndRemoveButtonPanel.add(Box.createHorizontalStrut(5));
+        editAndRemoveButtonPanel.add(new JSeparator(SwingConstants.VERTICAL));
+        editAndRemoveButtonPanel.add(Box.createHorizontalStrut(5));
+        editAndRemoveButtonPanel.add(removeButton);
+        return editAndRemoveButtonPanel;
     }
 
+    // MODIFIES: saveButton, loadButton, loadAndSaveButtonPanel
+    // EFFECTS: JButtons are created and configured for "Save" and "Load" features;
+    //          JPanel is created and JButtons are added to it; JPanel is returned
     private JPanel getSaveAndLoadButtonPanel() {
         saveButton = new JButton(saveString, saveIcon);
         saveButton.setActionCommand(saveString);
@@ -226,115 +211,131 @@ public class Swing extends JPanel
         loadButton.setActionCommand(loadString);
         loadButton.addActionListener(new LoadListener());
 
-        //Create a panel that uses BoxLayout.
-        JPanel loadAndSaveButtonPane = new JPanel();
-//        loadAndSaveButtonPane.setLayout(new BoxLayout(loadAndSaveButtonPane, BoxLayout.LINE_AXIS));
-        loadAndSaveButtonPane.add(saveButton);
-        loadAndSaveButtonPane.add(Box.createHorizontalStrut(5));
-        loadAndSaveButtonPane.add(new JSeparator(SwingConstants.VERTICAL));
-        loadAndSaveButtonPane.add(Box.createHorizontalStrut(5));
-        loadAndSaveButtonPane.add(loadButton);
-        return loadAndSaveButtonPane;
+        JPanel loadAndSaveButtonPanel = new JPanel();
+        loadAndSaveButtonPanel.add(saveButton);
+        loadAndSaveButtonPanel.add(Box.createHorizontalStrut(5));
+        loadAndSaveButtonPanel.add(new JSeparator(SwingConstants.VERTICAL));
+        loadAndSaveButtonPanel.add(Box.createHorizontalStrut(5));
+        loadAndSaveButtonPanel.add(loadButton);
+        return loadAndSaveButtonPanel;
     }
 
-    private JPanel getTopPanel(JPanel logoPane, JPanel addButtonPane) {
-        //Create a panel that uses BoxLayout.
-        JPanel topButtonPane = new JPanel();
-        topButtonPane.setLayout(new BoxLayout(topButtonPane, BoxLayout.LINE_AXIS));
-        topButtonPane.add(logoPane);
-        topButtonPane.add(Box.createHorizontalStrut(60));
-        topButtonPane.add(addButtonPane);
-        topButtonPane.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
-        return topButtonPane;
+    // MODIFIES: topButtonPanel
+    // EFFECTS: JPanel is created and JPanels passed in as parameters are placed on it using BoxLayout;
+    //          JPanel is returned
+    private JPanel getTopPanel(JPanel logoPanel, JPanel addButtonPanel) {
+        JPanel topButtonPanel = new JPanel();
+        topButtonPanel.setLayout(new BoxLayout(topButtonPanel, BoxLayout.LINE_AXIS));
+        topButtonPanel.add(logoPanel);
+        topButtonPanel.add(Box.createHorizontalStrut(60));
+        topButtonPanel.add(addButtonPanel);
+        topButtonPanel.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+        return topButtonPanel;
     }
 
-    private JPanel getBottomPanel(JPanel loadAndSaveButtonPane, JPanel editAndRemoveButtonPane) {
-        //Create a panel that uses BoxLayout.
-        JPanel bottomButtonPane = new JPanel();
-        bottomButtonPane.setLayout(new BoxLayout(bottomButtonPane, BoxLayout.LINE_AXIS));
-        bottomButtonPane.add(editAndRemoveButtonPane);
-        bottomButtonPane.add(loadAndSaveButtonPane);
-        bottomButtonPane.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
-        return bottomButtonPane;
+    // MODIFIES: bottomButtonPanel
+    // EFFECTS: JPanel is created and JPanels passed in as parameters are placed on it using BoxLayout;
+    //          JPanel is returned
+    private JPanel getBottomPanel(JPanel loadAndSaveButtonPanel, JPanel editAndRemoveButtonPanel) {
+        JPanel bottomButtonPanel = new JPanel();
+        bottomButtonPanel.setLayout(new BoxLayout(bottomButtonPanel, BoxLayout.LINE_AXIS));
+        bottomButtonPanel.add(editAndRemoveButtonPanel);
+        bottomButtonPanel.add(loadAndSaveButtonPanel);
+        bottomButtonPanel.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+        return bottomButtonPanel;
     }
 
-    // ===============
-    // EVENT LISTENERS
-    // ===============
+    // ============================
+    // EVENT LISTENERS AND HANDLERS
+    // ============================
 
-    //This listener is shared by the text field and the hire button.
+    // Represents an event listener for the "Add" button
     class AddListener implements ActionListener, DocumentListener {
         private boolean alreadyEnabled = false;
         private JButton button;
 
+        // Constructor
+        // EFFECTS: JButton is initialized
         public AddListener(JButton button) {
             this.button = button;
         }
 
-        //Required by ActionListener.
-        public void actionPerformed(ActionEvent e) {
+        // MODIFIES: phrase, author, newQuote, listModel, phraseField, authorField, list
+        // EFFECTS: phrase and author text are captured from phraseField and authorField;
+        //          newQuote is assembled and validated (not empty and not a duplicate);
+        //
+        public void actionPerformed(ActionEvent event) {
+
+            // Get text from phraseField and authorField
             phrase = phraseField.getText();
             author = authorField.getText();
+
+            // If authorField is empty, then set author to "Anonymous"
+            authorFieldValidation();
+
+            // Assemble newQuote
             newQuote = phrase  + " ~ " + author;
-            //User didn't type in a unique name...
+
+            // If phrase is empty or newQuote is a duplicate, then play a *beep* sound and return / exit
             if (phrase.equals("") || alreadyInList(newQuote)) {
                 playBeepSound();
                 out.println("BEEP!");
-
-//                phraseField.requestFocusInWindow();
-//                phraseField.selectAll();
-//                authorField.requestFocusInWindow();
-//                authorField.selectAll();
                 return;
             }
 
-            // REQUIRES: phrase has a non-zero length
-            // MODIFIES: Quote and Library
-            // EFFECTS: User input is captured for phrase and author;
-            //          phrase and author are used to populate a new Quote;
-            //          the new Quote is added to the Library
-//            Quote newQuote = new Quote(phrase, author);
-//            try {
-//                // checkDuplicate() throws DuplicateException()
-//                checkDuplicate(newQuote);
-//                library.addQuote(newQuote);
-////                saveLibrary();
-//            } catch (DuplicateException exception) {
-//                out.println("Sorry! That quote already exists.");
-//            }
-
-            int index = list.getSelectedIndex(); //get selected index
-            if (index == -1) { //no selection, so insert at beginning
+            // Get index of selected item in list
+            int index = list.getSelectedIndex();
+            // If no item is selected, then set index for insertion to 0 (the start of the list)
+            if (index == -1) {
                 index = 0;
-            } else {           //add after the selected item
+            // Otherwise, set index for insertion to be right after the selected item
+            } else {
                 index++;
             }
 
-            newQuote = (String) phraseField.getText() + " ~ " + authorField.getText();
+            // Insert newQuote into the listModel at position index
             listModel.insertElementAt(newQuote, index);
 
-            //Reset the text field.
+            // Reset the text field
             phraseField.requestFocusInWindow();
             phraseField.setText("");
             authorField.requestFocusInWindow();
             authorField.setText("");
 
-            //Select the new item and make it visible.
+            // Select the newQuote item and make it visible
             list.setSelectedIndex(index);
             list.ensureIndexIsVisible(index);
 
+            // Play sound for successful completion of task
             playAddSound();
         }
 
+        // --------------
+        // HELPER METHODS
+        // --------------
+
+        // MODIFIES: author
+        // EFFECTS: If authorField is empty, then author is set to "Anonymous"
+        private void authorFieldValidation() {
+            if (author.equals("")) {
+                author = "Anonymous";
+            }
+        }
+
+        // MODIFIES: url, audioIn, clip
+        // EFFECTS: File location is retrieved; audio input stream is opened; audio clip is set and opened;
+        //          audio is loaded and played / started from the audio input stream
         private void playAddSound() {
             try {
-                // Open an audio input stream.
+                // Retrieve location of audio file
                 URL url = this.getClass().getClassLoader().getResource("Add.wav");
+                // Open audio input stream
                 AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
-                // Get a sound clip resource.
+                // Get a sound clip resource
                 Clip clip = AudioSystem.getClip();
-                // Open audio clip and load samples from the audio input stream.
+                // Open audio clip from the audio input stream
                 clip.open(audioIn);
+                // Start playing the audio clip
                 clip.start();
             } catch (UnsupportedAudioFileException exception) {
                 exception.printStackTrace();
@@ -345,14 +346,14 @@ public class Swing extends JPanel
             }
         }
 
+        // MODIFIES: url, audioIn, clip
+        // EFFECTS: File location is retrieved; audio input stream is opened; audio clip is set and opened;
+        //          audio is loaded and played / started from the audio input stream
         private void playBeepSound() {
             try {
-                // Open an audio input stream.
                 URL url = this.getClass().getClassLoader().getResource("Beep.wav");
                 AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
-                // Get a sound clip resource.
                 Clip clip = AudioSystem.getClip();
-                // Open audio clip and load samples from the audio input stream.
                 clip.open(audioIn);
                 clip.start();
             } catch (UnsupportedAudioFileException exception) {
@@ -401,9 +402,11 @@ public class Swing extends JPanel
         }
     }
 
+    // Represents an event listener for the "Edit" button
     class EditListener implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent event) {
 
+            // Play sound for initiation of task
             playEditSound();
 
             int index = list.getSelectedIndex();
@@ -412,7 +415,7 @@ public class Swing extends JPanel
             phrase = splitStrings[0];
             author = splitStrings[1];
 
-            editedQuote = createEditPanel();
+            editedQuote = getEditPanel();
             listModel.setElementAt(editedQuote, index);
 
             //This method can be called only if
@@ -434,7 +437,7 @@ public class Swing extends JPanel
             }
         }
 
-        private String createEditPanel() {
+        private String getEditPanel() {
             String editedQuote = "";
 
             JPanel editPanel = new JPanel();
@@ -449,6 +452,9 @@ public class Swing extends JPanel
             return editedQuote;
         }
 
+        // MODIFIES: url, audioIn, clip
+        // EFFECTS: File location is retrieved; audio input stream is opened; audio clip is set and opened;
+        //          audio is loaded and played / started from the audio input stream
         private void playEditSound() {
             try {
                 // Open an audio input stream.
@@ -469,8 +475,9 @@ public class Swing extends JPanel
         }
     }
 
+    // Represents an event listener for the "Remove" button
     class RemoveListener implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent event) {
             //This method can be called only if
             //there's a valid selection
             //so go ahead and remove whatever's selected.
@@ -499,9 +506,13 @@ public class Swing extends JPanel
 //                library.removeQuote(library.getAllQuotes().get(index));
 //                saveLibrary();
             }
+            // Play sound for successful completion of task
             playRemoveSound();
         }
 
+        // MODIFIES: url, audioIn, clip
+        // EFFECTS: File location is retrieved; audio input stream is opened; audio clip is set and opened;
+        //          audio is loaded and played / started from the audio input stream
         private void playRemoveSound() {
             try {
                 // Open an audio input stream.
@@ -522,8 +533,9 @@ public class Swing extends JPanel
         }
     }
 
+    // Represents an event listener for the "Save" button
     class SaveListener implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent event) {
             library.removeAllQuotes();
             for (int i = 0; i < list.getModel().getSize(); i++) {
                 String string = (String) list.getModel().getElementAt(i);
@@ -534,9 +546,13 @@ public class Swing extends JPanel
             }
             saveLibrary();
 
+            // Play sound for successful completion of task
             playSaveSound();
         }
 
+        // MODIFIES: url, audioIn, clip
+        // EFFECTS: File location is retrieved; audio input stream is opened; audio clip is set and opened;
+        //          audio is loaded and played / started from the audio input stream
         private void playSaveSound() {
             try {
                 // Open an audio input stream.
@@ -557,17 +573,22 @@ public class Swing extends JPanel
         }
     }
 
+    // Represents an event listener for the "Load" button
     class LoadListener implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent event) {
             loadLibrary();
             listModel.removeAllElements();
             for (Quote quote : library.getAllQuotes()) {
                 listModel.addElement(quote.getPhrase() + " ~ " + quote.getAuthor());
             }
 
+            // Play sound for successful completion of task
             playLoadSound();
         }
 
+        // MODIFIES: url, audioIn, clip
+        // EFFECTS: File location is retrieved; audio input stream is opened; audio clip is set and opened;
+        //          audio is loaded and played / started from the audio input stream
         private void playLoadSound() {
             try {
                 // Open an audio input stream.
@@ -589,8 +610,8 @@ public class Swing extends JPanel
     }
 
     //This method is required by ListSelectionListener.
-    public void valueChanged(ListSelectionEvent e) {
-        if (e.getValueIsAdjusting() == false) {
+    public void valueChanged(ListSelectionEvent event) {
+        if (event.getValueIsAdjusting() == false) {
 
             if (list.getSelectedIndex() == -1) {
 
@@ -605,7 +626,7 @@ public class Swing extends JPanel
         }
     }
 
-    protected static void createAndShowGUI() {
+    protected static void getGUI() {
         //Create and set up the window.
         JFrame frame = new JFrame("Quote Library");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
