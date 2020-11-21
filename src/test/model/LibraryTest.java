@@ -10,17 +10,17 @@ class LibraryTest {
 
     private Library testLibrary;
     private Quote quote1;
-//    private Quote quote2;
+    private Quote quote2;
     private String phrase1 = "Phrase 1";
     private String author1 = "Author 1";
-//    private String phrase2 = "Phrase 2";
-//    private String author2 = "Author 2";
+    private String phrase2 = "Phrase 2";
+    private String author2 = "Author 2";
 
     @BeforeEach
     void setup() {
         testLibrary = new Library();
         quote1 = new Quote(phrase1, author1);
-//        quote2 = new Quote(phrase2, author2);
+        quote2 = new Quote(phrase2, author2);
     }
 
     // Source: IntegerSet example
@@ -62,6 +62,18 @@ class LibraryTest {
         checkLibraryContainsOnce(quote1);
         testLibrary.removeQuote(quote1);
         checkLibraryEmptyDoesntContain(quote1);
+    }
+
+    @Test
+    public void testRemoveAllQuotes() {
+        testLibrary.addQuote(quote1);
+        checkLibraryContainsOnce(quote1);
+        testLibrary.addQuote(quote2);
+        assertEquals(testLibrary.getAllQuotes().size(), 2);
+        assertTrue(testLibrary.getAllQuotes().contains(quote2));
+        testLibrary.removeAllQuotes();
+        checkLibraryEmptyDoesntContain(quote1);
+        checkLibraryEmptyDoesntContain(quote2);
     }
 
     @Test

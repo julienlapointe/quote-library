@@ -263,7 +263,8 @@ public class Swing extends JPanel
         // MODIFIES: phrase, author, newQuote, listModel, phraseField, authorField, list
         // EFFECTS: phrase and author text are captured from phraseField and authorField;
         //          newQuote is assembled and validated (not empty and not a duplicate);
-        //
+        //          newQuote is inserted into the listModel at position index;
+        //          phraseField and authorField are reset
         public void actionPerformed(ActionEvent event) {
 
             // Get text from phraseField and authorField
@@ -310,9 +311,9 @@ public class Swing extends JPanel
             playAddSound();
         }
 
-        // --------------
-        // HELPER METHODS
-        // --------------
+        // -----------------------------------------------------
+        // HELPER METHODS FOR actionPerformed(ActionEvent event)
+        // -----------------------------------------------------
 
         // MODIFIES: author
         // EFFECTS: If authorField is empty, then author is set to "Anonymous"
@@ -365,35 +366,38 @@ public class Swing extends JPanel
             }
         }
 
-        protected boolean alreadyInList(String name) {
-            return listModel.contains(name);
+        // EFFECTS: If listModel already contains the quote, then return true; otherwise, return false
+        protected boolean alreadyInList(String quote) {
+            return listModel.contains(quote);
         }
 
-        //Required by DocumentListener.
-        public void insertUpdate(DocumentEvent e) {
+        // Required by DocumentListener
+        public void insertUpdate(DocumentEvent event) {
             enableButton();
         }
 
-        //Required by DocumentListener.
-        public void removeUpdate(DocumentEvent e) {
-            handleEmptyTextField(e);
+        // Required by DocumentListener
+        public void removeUpdate(DocumentEvent event) {
+            handleEmptyTextField(event);
         }
 
-        //Required by DocumentListener.
-        public void changedUpdate(DocumentEvent e) {
-            if (!handleEmptyTextField(e)) {
+        // Required by DocumentListener
+        public void changedUpdate(DocumentEvent event) {
+            if (!handleEmptyTextField(event)) {
                 enableButton();
             }
         }
 
+        // Required by DocumentListener
         private void enableButton() {
             if (!alreadyEnabled) {
                 button.setEnabled(true);
             }
         }
 
-        private boolean handleEmptyTextField(DocumentEvent e) {
-            if (e.getDocument().getLength() <= 0) {
+        // Required by DocumentListener
+        private boolean handleEmptyTextField(DocumentEvent event) {
+            if (event.getDocument().getLength() <= 0) {
                 button.setEnabled(false);
                 alreadyEnabled = false;
                 return true;
@@ -404,6 +408,7 @@ public class Swing extends JPanel
 
     // Represents an event listener for the "Edit" button
     class EditListener implements ActionListener {
+
         public void actionPerformed(ActionEvent event) {
 
             // Play sound for initiation of task
@@ -457,12 +462,9 @@ public class Swing extends JPanel
         //          audio is loaded and played / started from the audio input stream
         private void playEditSound() {
             try {
-                // Open an audio input stream.
                 URL url = this.getClass().getClassLoader().getResource("Edit.wav");
                 AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
-                // Get a sound clip resource.
                 Clip clip = AudioSystem.getClip();
-                // Open audio clip and load samples from the audio input stream.
                 clip.open(audioIn);
                 clip.start();
             } catch (UnsupportedAudioFileException exception) {
@@ -515,12 +517,9 @@ public class Swing extends JPanel
         //          audio is loaded and played / started from the audio input stream
         private void playRemoveSound() {
             try {
-                // Open an audio input stream.
                 URL url = this.getClass().getClassLoader().getResource("Remove.wav");
                 AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
-                // Get a sound clip resource.
                 Clip clip = AudioSystem.getClip();
-                // Open audio clip and load samples from the audio input stream.
                 clip.open(audioIn);
                 clip.start();
             } catch (UnsupportedAudioFileException exception) {
@@ -555,12 +554,9 @@ public class Swing extends JPanel
         //          audio is loaded and played / started from the audio input stream
         private void playSaveSound() {
             try {
-                // Open an audio input stream.
                 URL url = this.getClass().getClassLoader().getResource("Save.wav");
                 AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
-                // Get a sound clip resource.
                 Clip clip = AudioSystem.getClip();
-                // Open audio clip and load samples from the audio input stream.
                 clip.open(audioIn);
                 clip.start();
             } catch (UnsupportedAudioFileException exception) {
@@ -591,12 +587,9 @@ public class Swing extends JPanel
         //          audio is loaded and played / started from the audio input stream
         private void playLoadSound() {
             try {
-                // Open an audio input stream.
                 URL url = this.getClass().getClassLoader().getResource("Load.wav");
                 AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
-                // Get a sound clip resource.
                 Clip clip = AudioSystem.getClip();
-                // Open audio clip and load samples from the audio input stream.
                 clip.open(audioIn);
                 clip.start();
             } catch (UnsupportedAudioFileException exception) {

@@ -24,8 +24,10 @@ library.
 - As a user, I want to be able to **edit** a quote in my library.
 - As a user, I want to be able to **remove** a quote from my library.
 - As a user, I want to be able to **view** all my quotes in a list.
-- As a user, I want my library of quotes to **auto-save** to a file.
-- As a user, I want my library of quotes to **auto-load** from a file.
+- As a user, I want to be able to **save** all my quotes to a file.
+- As a user, I want to be able to **load** all my quotes from a file.
 
 Citations
 - Persistence code based on https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo.git
+- Swing code based on https://www.lynda.com/Java-tutorials/Learn-Java-Swing/592496-2.html 
+(Lynda.com's Learn Java with Swing course)
