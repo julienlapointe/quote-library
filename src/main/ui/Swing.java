@@ -260,7 +260,9 @@ public class Swing extends JPanel
             this.button = button;
         }
 
-        // MODIFIES: phrase, author, newQuote, listModel, phraseField, authorField, list
+        // MODIFIES: phrase, author, newQuote, listModel, phraseField, authorField, list,
+        //           url, audioIn, clip,
+        //           button, alreadyEnabled
         // EFFECTS: phrase and author text are captured from phraseField and authorField;
         //          newQuote is assembled and validated (not empty and not a duplicate);
         //          newQuote is inserted into the listModel at position index;
@@ -284,12 +286,12 @@ public class Swing extends JPanel
                 return;
             }
 
-            // Get index of selected item in list
+            // Get index of selected list item
             int index = list.getSelectedIndex();
-            // If no item is selected, then set index for insertion to 0 (the start of the list)
+            // If no list item is selected, then set index for insertion to 0 (the start of the list)
             if (index == -1) {
                 index = 0;
-            // Otherwise, set index for insertion to be right after the selected item
+            // Otherwise, set index for insertion to be right after the selected list item
             } else {
                 index++;
             }
@@ -303,7 +305,7 @@ public class Swing extends JPanel
             authorField.requestFocusInWindow();
             authorField.setText("");
 
-            // Select the newQuote item and make it visible
+            // Select the newQuote list item and make it visible
             list.setSelectedIndex(index);
             list.ensureIndexIsVisible(index);
 
@@ -389,6 +391,7 @@ public class Swing extends JPanel
         }
 
         // Required by DocumentListener
+        // MODIFIES: button
         private void enableButton() {
             if (!alreadyEnabled) {
                 button.setEnabled(true);
@@ -396,6 +399,7 @@ public class Swing extends JPanel
         }
 
         // Required by DocumentListener
+        // MODIFIES: button, alreadyEnabled
         private boolean handleEmptyTextField(DocumentEvent event) {
             if (event.getDocument().getLength() <= 0) {
                 button.setEnabled(false);
@@ -409,39 +413,45 @@ public class Swing extends JPanel
     // Represents an event listener for the "Edit" button
     class EditListener implements ActionListener {
 
+        // MODIFIES: index, string, splitStrings, phrase, author, listModel, size, editButton, list,
+        //           editPanel, phraseField, authorField,
+        //           url, audioIn, clip
+        // EFFECTS: Value of the selected list item is captured, parsed, and inserted into phraseField and authorField
+        //          of JOptionPane pop-up dialog; edited values are captured from phraseField and authorField;
+        //          editedQuote is assembled and validated (not empty and not a duplicate);
+        //          editedQuote is inserted into the listModel at the same index
         public void actionPerformed(ActionEvent event) {
 
             // Play sound for initiation of task
             playEditSound();
 
+            // Get the index of the selected list item
             int index = list.getSelectedIndex();
+            // Get value of the selected list item
             String string = (String) list.getModel().getElementAt(index);
+            // Split string into phrase and author
             String[] splitStrings = string.split(" ~ ");
             phrase = splitStrings[0];
             author = splitStrings[1];
 
+            // Get JOptionPane pop-up dialog to capture edited values phrase and author (editedQuote)
             editedQuote = getEditPanel();
+            // Replace list item at same index with editedQuote
             listModel.setElementAt(editedQuote, index);
 
-            //This method can be called only if
-            //there's a valid selection
-            //so go ahead and remove whatever's selected.
+            // Get number of list items in listModel
             int size = listModel.getSize();
 
-            if (size == 0) { //Nobody's left, disable firing.
+            // If there are no list items to select, disable the "Edit" button
+            if (size == 0) {
                 editButton.setEnabled(false);
-            } else { //Select an index.
-
-                if (index == listModel.getSize()) {
-                    //removed item in last position
-                    index--;
-                }
-
-                list.setSelectedIndex(index);
-                list.ensureIndexIsVisible(index);
             }
         }
 
+        // MODIFIES: editPanel, phraseField, authorField
+        // EFFECTS: JPanel is created with two JTextFields; JPanel is added to a JOptionPane;
+        //          phraseField and authorField are captured; values are assembled into editedQuote;
+        //          editedQuote is returned
         private String getEditPanel() {
             String editedQuote = "";
 
@@ -480,33 +490,23 @@ public class Swing extends JPanel
     // Represents an event listener for the "Remove" button
     class RemoveListener implements ActionListener {
         public void actionPerformed(ActionEvent event) {
-            //This method can be called only if
-            //there's a valid selection
-            //so go ahead and remove whatever's selected.
+
+            // Get the index of the selected list item
             int index = list.getSelectedIndex();
+            // Remove selected list item
             listModel.removeElementAt(index);
 
+            // Get number of list items in listModel
             int size = listModel.getSize();
 
-            if (size == 0) { //Nobody's left, disable firing.
+            // If there are no list items to select, disable the "Remove" button
+            if (size == 0) {
                 removeButton.setEnabled(false);
-
-            } else { //Select an index.
-                if (index == listModel.getSize()) {
-                    //removed item in last position
-                    index--;
-                }
-
+            // Otherwise, select the previous list item
+            } else {
+                index--;
                 list.setSelectedIndex(index);
                 list.ensureIndexIsVisible(index);
-
-                // REQUIRES: 1 <= userInput <= total number of Quotes in Library
-                // MODIFIES: Quote and Library
-                // EFFECTS: userInput is captured;
-                //          userInput is used to find Quote to delete;
-                //          Quote is deleted from Library
-//                library.removeQuote(library.getAllQuotes().get(index));
-//                saveLibrary();
             }
             // Play sound for successful completion of task
             playRemoveSound();
@@ -602,35 +602,35 @@ public class Swing extends JPanel
         }
     }
 
-    //This method is required by ListSelectionListener.
+    // Required by ListSelectionListener
+    // MODIFIES: removeButton, editButton
     public void valueChanged(ListSelectionEvent event) {
         if (event.getValueIsAdjusting() == false) {
-
             if (list.getSelectedIndex() == -1) {
-
-                removeButton.setEnabled(false);
                 editButton.setEnabled(false);
-
+                removeButton.setEnabled(false);
             } else {
-
-                removeButton.setEnabled(true);
                 editButton.setEnabled(true);
+                removeButton.setEnabled(true);
             }
         }
     }
 
+    // MODIFIES: frame, contentPane
+    // EFFECTS: JFrame is created and configured; JComponent is created and added to JFrame;
+    //          JFrame is displayed
     protected static void getGUI() {
-        //Create and set up the window.
+
+        // Create and set up the window
         JFrame frame = new JFrame("Quote Library");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        //Create and set up the content pane.
-        JComponent newContentPane = null;
-        newContentPane = new Swing();
-        newContentPane.setOpaque(true); //content panes must be opaque
-        frame.setContentPane(newContentPane);
+        // Create and set up the content pane
+        JComponent contentPane = new Swing();
+        contentPane.setOpaque(true); //content panes must be opaque
+        frame.setContentPane(contentPane);
 
-        //Display the window.
+        // Display the window
         frame.pack();
         frame.setVisible(true);
     }
