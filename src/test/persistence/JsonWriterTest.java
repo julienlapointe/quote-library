@@ -39,7 +39,7 @@ class JsonWriterTest extends JsonTest {
 
             JsonReader reader = new JsonReader("./data/testJsonWriterNoQuotes.json");
             library = reader.read();
-            assertEquals(0, library.numberOfQuotes());
+            assertEquals(0, library.getNumberOfQuotes());
         } catch (IOException e) {
             fail("Exception should not have been thrown");
         }

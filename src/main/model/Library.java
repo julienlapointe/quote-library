@@ -51,7 +51,7 @@ public class Library implements Writable {
     }
 
     // EFFECTS: returns the number of Quotes in Library
-    public int numberOfQuotes() {
+    public int getNumberOfQuotes() {
         return quotes.size();
     }
 

@@ -32,57 +32,27 @@ class LibraryTest {
     // Source: IntegerSet example
     @Test
     void testAddQuote() {
-        checkLibraryEmptyDoesntContain(quote1);
-        try {
-            testLibrary.addQuote(quote1);
-        } catch (EmptyException e) {
-            System.out.println("Empty exception caught in LibraryTest.java!");
-            fail("I was not expecting EmptyException!");
-        } catch (DuplicateException e) {
-            System.out.println("Duplicate exception caught in LibraryTest.java!");
-            fail("I was not expecting DuplicateException!");
-        }
+        checkLibraryEmptyDoesNotContain(quote1);
+        addQuoteNonExceptional(quote1);
         checkLibraryContainsOnce(quote1);
     }
 
     // Test adding duplicate quotes
     @Test
     public void testAddQuoteDuplicate() {
-        checkLibraryEmptyDoesntContain(quote1);
-        try {
-            testLibrary.addQuote(quote1);
-        } catch (EmptyException e) {
-            System.out.println("Empty exception caught in LibraryTest.java!");
-            fail("I was not expecting EmptyException!");
-        } catch (DuplicateException e) {
-            System.out.println("Duplicate exception caught in LibraryTest.java!");
-            fail("I was not expecting DuplicateException!");
-        }
+        checkLibraryEmptyDoesNotContain(quote1);
+        addQuoteNonExceptional(quote1);
         checkLibraryContainsOnce(quote1);
-        try {
-            testLibrary.addQuote(quote1);
-            fail("I was not expecting to reach this line!");
-        } catch (EmptyException e) {
-            System.out.println("Empty exception caught in LibraryTest.java!");
-        } catch (DuplicateException e) {
-            System.out.println("Duplicate exception caught in LibraryTest.java!");
-        }
+        addQuoteExceptional(quote1);
         checkLibraryContainsOnce(quote1);
     }
 
     // Test adding empty quote
     @Test
     public void testAddQuoteEmpty() {
-        checkLibraryEmptyDoesntContain(quote3);
-        try {
-            testLibrary.addQuote(quote3);
-            fail("I was not expecting to reach this line!");
-        } catch (EmptyException e) {
-            System.out.println("Empty exception caught in LibraryTest.java!");
-        } catch (DuplicateException e) {
-            System.out.println("Duplicate exception caught in LibraryTest.java!");
-        }
-        checkLibraryEmptyDoesntContain(quote3);
+        checkLibraryEmptyDoesNotContain(quote3);
+        addQuoteExceptional(quote3);
+        checkLibraryEmptyDoesNotContain(quote3);
     }
 
     @Test
@@ -94,84 +64,83 @@ class LibraryTest {
             randomPhrase = randomString();
             randomAuthor = randomString();
             newQuote = new Quote(randomPhrase, randomAuthor);
-            try {
-                testLibrary.addQuote(newQuote);
-            } catch (EmptyException e) {
-                System.out.println("Empty exception caught in LibraryTest.java!");
-            } catch (DuplicateException e) {
-                System.out.println("Duplicate exception caught in LibraryTest.java!");
-            }
+            addQuoteNonExceptional(newQuote);
             assertTrue(testLibrary.getAllQuotes().contains(newQuote));
-            assertEquals(testLibrary.getAllQuotes().size(), i+1);
+            assertEquals(i+1, testLibrary.getNumberOfQuotes());
         }
     }
 
     @Test
     public void testRemoveQuote() {
-        try {
-            testLibrary.addQuote(quote1);
-        } catch (EmptyException e) {
-            System.out.println("Empty exception caught in LibraryTest.java!");
-        } catch (DuplicateException e) {
-            System.out.println("Duplicate exception caught in LibraryTest.java!");
-        }
+        addQuoteNonExceptional(quote1);
         checkLibraryContainsOnce(quote1);
         testLibrary.removeQuote(quote1);
-        checkLibraryEmptyDoesntContain(quote1);
+        checkLibraryEmptyDoesNotContain(quote1);
     }
 
     @Test
     public void testRemoveAllQuotes() {
-        try {
-            testLibrary.addQuote(quote1);
-        } catch (EmptyException e) {
-            System.out.println("Empty exception caught in LibraryTest.java!");
-        } catch (DuplicateException e) {
-            System.out.println("Duplicate exception caught in LibraryTest.java!");
-        }
+        addQuoteNonExceptional(quote1);
         checkLibraryContainsOnce(quote1);
-        try {
-            testLibrary.addQuote(quote2);
-        } catch (EmptyException e) {
-            System.out.println("Empty exception caught in LibraryTest.java!");
-        } catch (DuplicateException e) {
-            System.out.println("Duplicate exception caught in LibraryTest.java!");
-        }
-        assertEquals(testLibrary.getAllQuotes().size(), 2);
+        addQuoteNonExceptional(quote2);
+        assertEquals(2, testLibrary.getNumberOfQuotes());
         assertTrue(testLibrary.getAllQuotes().contains(quote2));
         testLibrary.removeAllQuotes();
-        checkLibraryEmptyDoesntContain(quote1);
-        checkLibraryEmptyDoesntContain(quote2);
+        checkLibraryEmptyDoesNotContain(quote1);
+        checkLibraryEmptyDoesNotContain(quote2);
     }
 
     @Test
     public void testEditQuote() {
+        addQuoteNonExceptional(quote1);
         try {
-            testLibrary.addQuote(quote1);
-        } catch (EmptyException e) {
-            System.out.println("Empty exception caught in LibraryTest.java!");
-        } catch (DuplicateException e) {
-            System.out.println("Duplicate exception caught in LibraryTest.java!");
+            testLibrary.editQuote(quote2, 0);
+        } catch (EmptyException exception) {
+            System.out.println("EmptyException caught in LibraryTest.java!");
+            fail("I was not expecting EmptyException!");
+        } catch (DuplicateException exception) {
+            System.out.println("DuplicateException caught in LibraryTest.java!");
+            fail("I was not expecting DuplicateException!");
         }
-        quote1.setPhrase("Test");
-        quote1.setAuthor("Test");
-//        testLibrary.editQuote(quote1);
-        assertEquals(quote1.getPhrase(), "Test");
-        assertEquals(quote1.getAuthor(), "Test");
+        assertEquals("Phrase 2", testLibrary.getAllQuotes().get(0).getPhrase());
+        assertEquals("Author 2", testLibrary.getAllQuotes().get(0).getAuthor());
     }
 
     // ==============
     // Helper methods
     // ==============
 
-    private void checkLibraryEmptyDoesntContain(Quote quote) {
-        assertEquals(testLibrary.getAllQuotes().size(), 0);
+    private void checkLibraryEmptyDoesNotContain(Quote quote) {
+        assertEquals(0, testLibrary.getNumberOfQuotes());
         assertFalse(testLibrary.getAllQuotes().contains(quote));
     }
 
     private void checkLibraryContainsOnce(Quote quote) {
-        assertEquals(testLibrary.getAllQuotes().size(), 1);
+        assertEquals(1, testLibrary.getNumberOfQuotes());
         assertTrue(testLibrary.getAllQuotes().contains(quote));
+    }
+
+    private void addQuoteNonExceptional(Quote quote) {
+        try {
+            testLibrary.addQuote(quote);
+        } catch (EmptyException exception) {
+            System.out.println("EmptyException caught in LibraryTest.java!");
+            fail("I was not expecting EmptyException!");
+        } catch (DuplicateException exception) {
+            System.out.println("DuplicateException caught in LibraryTest.java!");
+            fail("I was not expecting DuplicateException!");
+        }
+    }
+
+    private void addQuoteExceptional(Quote quote) {
+        try {
+            testLibrary.addQuote(quote);
+            fail("I was not expecting to reach this line!");
+        } catch (EmptyException exception) {
+            System.out.println("EmptyException in LibraryTest.java!");
+        } catch (DuplicateException exception) {
+            System.out.println("DuplicateException caught in LibraryTest.java!");
+        }
     }
 
     private String randomString() {

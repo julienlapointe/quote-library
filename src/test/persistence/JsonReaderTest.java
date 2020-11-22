@@ -27,7 +27,7 @@ class JsonReaderTest extends JsonTest {
         JsonReader reader = new JsonReader("./data/testJsonReaderNoQuotes.json");
         try {
             Library library = reader.read();
-            assertEquals(0, library.numberOfQuotes());
+            assertEquals(0, library.getNumberOfQuotes());
         } catch (IOException e) {
             fail("Couldn't read from file");
         }
