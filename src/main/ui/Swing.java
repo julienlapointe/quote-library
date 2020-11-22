@@ -2,6 +2,7 @@ package ui;
 
 // Imports
 import exceptions.DuplicateException;
+import exceptions.EmptyException;
 import model.Library;
 import model.Quote;
 import persistence.JsonReader;
@@ -10,6 +11,8 @@ import persistence.JsonWriter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
@@ -34,6 +37,9 @@ public class Swing extends JPanel
     private static final String JSON_FILE_LOCATION = "./data/quotes.json";
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
+
+    static private JFrame frame;
+    static private Quote editedQuote;
 
     // List, TextField, and Button Fields
     private JList list;
@@ -64,8 +70,8 @@ public class Swing extends JPanel
     // String Manipulation Fields
     private String phrase = "";
     private String author = "";
-    private String newQuote = "";
-    private String editedQuote = "";
+    private String newQuoteString = "";
+    private String[] editedQuoteString;
 
     // Constructor
     // EFFECTS: Library, JsonWriter, JsonReader, and DefaultListModel are initialized;
@@ -113,7 +119,11 @@ public class Swing extends JPanel
     // EFFECTS: Dummy quotes are added to library and listModel
     private void addDummyQuotes() throws DuplicateException {
         for (String phrase : Arrays.asList("First dummy quote.", "Second dummy quote.", "Third dummy quote.")) {
-            library.addQuote(new Quote(phrase, "Anonymous"));
+            try {
+                library.addQuote(new Quote(phrase, "Anonymous"));
+            } catch (EmptyException | DuplicateException e) {
+                out.println("Exception caught in Swing.addDummyQuotes()!");
+            }
         }
         for (Quote quote : library.getAllQuotes()) {
             listModel.addElement(quote.getPhrase() + " ~ " + quote.getAuthor());
@@ -274,47 +284,33 @@ public class Swing extends JPanel
         //          phraseField and authorField are reset
         public void actionPerformed(ActionEvent event) {
 
-            // Get text from phraseField and authorField
+            // Get values from phraseField and authorField
             phrase = phraseField.getText();
             author = authorField.getText();
 
+            // Create new Quote and add to Library model
+            Quote newQuote = new Quote(phrase, author);
             try {
-                library.addQuote(new Quote(phrase, author));
+                library.addQuote(newQuote);
+            } catch (EmptyException e) {
+                playBeepSound();
+                out.println("BEEP! Sorry, the \"Quote\" text field cannot be empty.");
+                return;
             } catch (DuplicateException e) {
                 playBeepSound();
-                out.println("BEEP!");
+                out.println("BEEP! Sorry, that quote is already in the library.");
                 return;
             }
 
-            // If authorField is empty, then set author to "Anonymous"
-            authorFieldValidation();
+            // Assemble newQuoteString
+            newQuoteString = newQuote.getPhrase() + " ~ " + newQuote.getAuthor();
+            // Set index for insertion of newQuoteString
+            int index = setListItemInsertionIndex();
+            // Insert newQuoteString into the listModel at position index
+            listModel.insertElementAt(newQuoteString, index);
 
-            // Assemble newQuote
-            newQuote = phrase  + " ~ " + author;
-
-            // If phrase is empty or newQuote is a duplicate, then play a *beep* sound and return / exit
-//            if (phrase.equals("") || alreadyInList(newQuote)) {
-//
-//            }
-
-            // Get index of selected list item
-            int index = list.getSelectedIndex();
-            // If no list item is selected, then set index for insertion to 0 (the start of the list)
-            if (index == -1) {
-                index = 0;
-            // Otherwise, set index for insertion to be right after the selected list item
-            } else {
-                index++;
-            }
-
-            // Insert newQuote into the listModel at position index
-            listModel.insertElementAt(newQuote, index);
-
-            // Reset the text field
-            phraseField.requestFocusInWindow();
-            phraseField.setText("");
-            authorField.requestFocusInWindow();
-            authorField.setText("");
+            // Reset the text fields
+            resetTextFields();
 
             // Select the newQuote list item and make it visible
             list.setSelectedIndex(index);
@@ -328,12 +324,25 @@ public class Swing extends JPanel
         // HELPER METHODS FOR actionPerformed(ActionEvent event)
         // -----------------------------------------------------
 
-        // MODIFIES: author
-        // EFFECTS: If authorField is empty, then author is set to "Anonymous"
-        private void authorFieldValidation() {
-            if (author.equals("")) {
-                author = "Anonymous";
+        private int setListItemInsertionIndex() {
+            // Get index of selected list item
+            int index = list.getSelectedIndex();
+            // If no list item is selected, then set index for insertion to 0 (the start of the list)
+            if (index == -1) {
+                index = 0;
+                // Otherwise, set index for insertion to be right after the selected list item
+            } else {
+                index++;
             }
+            return index;
+        }
+
+        private void resetTextFields() {
+            // Reset the text fields
+            phraseField.requestFocusInWindow();
+            phraseField.setText("");
+            authorField.requestFocusInWindow();
+            authorField.setText("");
         }
 
         // MODIFIES: url, audioIn, clip
@@ -350,25 +359,6 @@ public class Swing extends JPanel
                 // Open audio clip from the audio input stream
                 clip.open(audioIn);
                 // Start playing the audio clip
-                clip.start();
-            } catch (UnsupportedAudioFileException exception) {
-                exception.printStackTrace();
-            } catch (IOException exception) {
-                exception.printStackTrace();
-            } catch (LineUnavailableException exception) {
-                exception.printStackTrace();
-            }
-        }
-
-        // MODIFIES: url, audioIn, clip
-        // EFFECTS: File location is retrieved; audio input stream is opened; audio clip is set and opened;
-        //          audio is loaded and played / started from the audio input stream
-        private void playBeepSound() {
-            try {
-                URL url = this.getClass().getClassLoader().getResource("Beep.wav");
-                AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
-                Clip clip = AudioSystem.getClip();
-                clip.open(audioIn);
                 clip.start();
             } catch (UnsupportedAudioFileException exception) {
                 exception.printStackTrace();
@@ -421,6 +411,25 @@ public class Swing extends JPanel
         }
     }
 
+    // MODIFIES: url, audioIn, clip
+    // EFFECTS: File location is retrieved; audio input stream is opened; audio clip is set and opened;
+    //          audio is loaded and played / started from the audio input stream
+    private void playBeepSound() {
+        try {
+            URL url = this.getClass().getClassLoader().getResource("Beep.wav");
+            AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioIn);
+            clip.start();
+        } catch (UnsupportedAudioFileException exception) {
+            exception.printStackTrace();
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        } catch (LineUnavailableException exception) {
+            exception.printStackTrace();
+        }
+    }
+
     // Represents an event listener for the "Edit" button
     class EditListener implements ActionListener {
 
@@ -446,9 +455,9 @@ public class Swing extends JPanel
             author = splitStrings[1];
 
             // Get JOptionPane pop-up dialog to capture edited values phrase and author (editedQuote)
-            editedQuote = getEditPanel();
+            editedQuoteString = getEditPanel(index);
             // Replace list item at same index with editedQuote
-            listModel.setElementAt(editedQuote, index);
+            listModel.setElementAt(editedQuoteString[0], index);
 
             // Get number of list items in listModel
             int size = listModel.getSize();
@@ -463,19 +472,55 @@ public class Swing extends JPanel
         // EFFECTS: JPanel is created with two JTextFields; JPanel is added to a JOptionPane;
         //          phraseField and authorField are captured; values are assembled into editedQuote;
         //          editedQuote is returned
-        private String getEditPanel() {
-            String editedQuote = "";
+        private String[] getEditPanel(int index) {
 
             JPanel editPanel = new JPanel();
             JTextField phraseField = new JTextField(phrase,20);
             JTextField authorField = new JTextField(author,20);
             editPanel.add(phraseField);
             editPanel.add(authorField);
-            JOptionPane.showMessageDialog(null, editPanel);
+//            JOptionPane.showMessageDialog(null, editPanel);
+            JOptionPane optionPane = new JOptionPane(editPanel);
+            JDialog dialog = new JDialog(frame);
+            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            dialog.setContentPane(optionPane);
 
-            editedQuote = phraseField.getText() + " ~ " + authorField.getText();
+            optionPane.addPropertyChangeListener(new PropertyChangeListener() {
+                @Override
+                public void propertyChange(PropertyChangeEvent event) {
+                    if (JOptionPane.VALUE_PROPERTY.equals(event.getPropertyName())) {
 
-            return editedQuote;
+                        // Get values from phraseField and authorField
+                        phrase = phraseField.getText();
+                        author = authorField.getText();
+
+                        // Create new Quote and add to Library model
+                        editedQuote = new Quote(phrase, author);
+
+                        try {
+                            library.editQuote(editedQuote, index);
+                        } catch (EmptyException e) {
+                            playBeepSound();
+                            out.println("BEEP! Sorry, the \"Quote\" text field cannot be empty.");
+                            // return;
+                        } catch (DuplicateException e) {
+                            playBeepSound();
+                            out.println("BEEP! Sorry, that quote is already in the library.");
+                            // return;
+                        }
+
+                        editedQuoteString[0] = editedQuote.getPhrase() + " ~ " + editedQuote.getAuthor();
+
+                        dialog.dispose();
+                    }
+                }
+            });
+
+            dialog.pack();
+            dialog.setLocationRelativeTo(frame);
+            dialog.setVisible(true);
+
+            return editedQuoteString;
         }
 
         // MODIFIES: url, audioIn, clip
@@ -554,8 +599,8 @@ public class Swing extends JPanel
                 author = splitStrings[1];
                 try {
                     library.addQuote(new Quote(phrase, author));
-                } catch (DuplicateException e) {
-                    out.println("Another duplicate exception caught!");
+                } catch (EmptyException | DuplicateException e) {
+                    out.println("Exception caught in Swing.SaveListener.actionPerformed()!");
                 }
             }
             saveLibrary();
@@ -637,7 +682,7 @@ public class Swing extends JPanel
     protected static void getGUI() {
 
         // Create and set up the window
-        JFrame frame = new JFrame("Quote Library");
+        frame = new JFrame("Quote Library");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Create and set up the content pane

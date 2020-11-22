@@ -5,6 +5,7 @@ import exceptions.EmptyException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import persistence.Writable;
+import sun.invoke.empty.Empty;
 
 import java.util.ArrayList;
 
@@ -21,11 +22,15 @@ public class Library implements Writable {
     // REQUIRES: quote contains a phrase String of non-zero length
     // MODIFIES: this
     // EFFECTS: newQuote is added to the Library of Quotes
-    public void addQuote(Quote newQuote) throws DuplicateException {
-        if (quotes.contains(newQuote)) {
-            throw new DuplicateException();
-        }
+    public void addQuote(Quote newQuote) throws EmptyException, DuplicateException {
+        validateQuote(newQuote);
         quotes.add(newQuote);
+    }
+
+    public Quote editQuote(Quote editedQuote, int index) throws EmptyException, DuplicateException {
+        validateQuote(editedQuote);
+        quotes.set(index, editedQuote);
+        return editedQuote;
     }
 
     // MODIFIES: this
@@ -66,5 +71,24 @@ public class Library implements Writable {
             jsonArray.put(quote.toJson());
         }
         return jsonArray;
+    }
+
+    // ==============
+    // HELPER METHODS
+    // ==============
+
+    private void validateQuote(Quote quote) throws EmptyException, DuplicateException {
+        // Check if phrase is empty
+        if (quote.getPhrase().isEmpty()) {
+            throw new EmptyException();
+        }
+        // Check if author is empty
+        if (quote.getAuthor().isEmpty()) {
+            quote.setAuthor("Anonymous");
+        }
+        // Check if quote is a duplicate
+        if (quotes.contains(quote)) {
+            throw new DuplicateException();
+        }
     }
 }
