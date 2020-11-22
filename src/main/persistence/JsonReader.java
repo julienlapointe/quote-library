@@ -1,5 +1,6 @@
 package persistence;
 
+import exceptions.DuplicateException;
 import model.Quote;
 import model.Library;
 
@@ -73,6 +74,10 @@ public class JsonReader {
         String phrase = jsonObject.getString("phrase");
         String author = jsonObject.getString("author");
         Quote quote = new Quote(phrase, author);
-        library.addQuote(quote);
+        try {
+            library.addQuote(quote);
+        } catch (DuplicateException e) {
+            System.out.println("Duplicate exception caught in JsonReader.java!");;
+        }
     }
 }

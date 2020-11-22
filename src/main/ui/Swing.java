@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
 import javax.sound.sampled.*;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -81,7 +82,11 @@ public class Swing extends JPanel
         listModel = new DefaultListModel();
 
         // Add dummy quotes until quotes are loaded from file
-        addDummyQuotes();
+        try {
+            addDummyQuotes();
+        } catch (DuplicateException e) {
+            out.println("Duplicate exception caught!");
+        }
 
         // Assemble components into panels
         JScrollPane listScrollPane = getListPane();
@@ -106,10 +111,10 @@ public class Swing extends JPanel
 
     // MODIFIES: library, listModel
     // EFFECTS: Dummy quotes are added to library and listModel
-    private void addDummyQuotes() {
-        library.addQuote(new Quote("First dummy quote.", "Anonymous"));
-        library.addQuote(new Quote("Second dummy quote.", "Anonymous"));
-        library.addQuote(new Quote("Third dummy quote.", "Anonymous"));
+    private void addDummyQuotes() throws DuplicateException {
+        for (String phrase : Arrays.asList("First dummy quote.", "Second dummy quote.", "Third dummy quote.")) {
+            library.addQuote(new Quote(phrase, "Anonymous"));
+        }
         for (Quote quote : library.getAllQuotes()) {
             listModel.addElement(quote.getPhrase() + " ~ " + quote.getAuthor());
         }
@@ -273,6 +278,14 @@ public class Swing extends JPanel
             phrase = phraseField.getText();
             author = authorField.getText();
 
+            try {
+                library.addQuote(new Quote(phrase, author));
+            } catch (DuplicateException e) {
+                playBeepSound();
+                out.println("BEEP!");
+                return;
+            }
+
             // If authorField is empty, then set author to "Anonymous"
             authorFieldValidation();
 
@@ -280,11 +293,9 @@ public class Swing extends JPanel
             newQuote = phrase  + " ~ " + author;
 
             // If phrase is empty or newQuote is a duplicate, then play a *beep* sound and return / exit
-            if (phrase.equals("") || alreadyInList(newQuote)) {
-                playBeepSound();
-                out.println("BEEP!");
-                return;
-            }
+//            if (phrase.equals("") || alreadyInList(newQuote)) {
+//
+//            }
 
             // Get index of selected list item
             int index = list.getSelectedIndex();
@@ -541,7 +552,11 @@ public class Swing extends JPanel
                 String[] splitStrings = string.split(" ~ ");
                 phrase = splitStrings[0];
                 author = splitStrings[1];
-                library.addQuote(new Quote(phrase, author));
+                try {
+                    library.addQuote(new Quote(phrase, author));
+                } catch (DuplicateException e) {
+                    out.println("Another duplicate exception caught!");
+                }
             }
             saveLibrary();
 

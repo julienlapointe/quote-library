@@ -1,5 +1,7 @@
 package model;
 
+import exceptions.DuplicateException;
+import exceptions.EmptyException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import persistence.Writable;
@@ -19,7 +21,10 @@ public class Library implements Writable {
     // REQUIRES: quote contains a phrase String of non-zero length
     // MODIFIES: this
     // EFFECTS: newQuote is added to the Library of Quotes
-    public void addQuote(Quote newQuote) {
+    public void addQuote(Quote newQuote) throws DuplicateException {
+        if (quotes.contains(newQuote)) {
+            throw new DuplicateException();
+        }
         quotes.add(newQuote);
     }
 

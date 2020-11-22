@@ -1,5 +1,6 @@
 package model;
 
+import exceptions.DuplicateException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,7 +28,11 @@ class LibraryTest {
     @Test
     void testAddQuote() {
         checkLibraryEmptyDoesntContain(quote1);
-        testLibrary.addQuote(quote1);
+        try {
+            testLibrary.addQuote(quote1);
+        } catch (DuplicateException e) {
+            System.out.println("Duplicate exception caught in LibraryTest.java!");
+        }
         checkLibraryContainsOnce(quote1);
     }
 
@@ -50,7 +55,11 @@ class LibraryTest {
             randomPhrase = randomString();
             randomAuthor = randomString();
             newQuote = new Quote(randomPhrase, randomAuthor);
-            testLibrary.addQuote(newQuote);
+            try {
+                testLibrary.addQuote(newQuote);
+            } catch (DuplicateException e) {
+                System.out.println("Duplicate exception caught in LibraryTest.java!");
+            }
             assertTrue(testLibrary.getAllQuotes().contains(newQuote));
             assertEquals(testLibrary.getAllQuotes().size(), i+1);
         }
@@ -58,7 +67,11 @@ class LibraryTest {
 
     @Test
     public void testRemoveQuote() {
-        testLibrary.addQuote(quote1);
+        try {
+            testLibrary.addQuote(quote1);
+        } catch (DuplicateException e) {
+            System.out.println("Duplicate exception caught in LibraryTest.java!");
+        }
         checkLibraryContainsOnce(quote1);
         testLibrary.removeQuote(quote1);
         checkLibraryEmptyDoesntContain(quote1);
@@ -66,9 +79,17 @@ class LibraryTest {
 
     @Test
     public void testRemoveAllQuotes() {
-        testLibrary.addQuote(quote1);
+        try {
+            testLibrary.addQuote(quote1);
+        } catch (DuplicateException e) {
+            System.out.println("Duplicate exception caught in LibraryTest.java!");
+        }
         checkLibraryContainsOnce(quote1);
-        testLibrary.addQuote(quote2);
+        try {
+            testLibrary.addQuote(quote2);
+        } catch (DuplicateException e) {
+            System.out.println("Duplicate exception caught in LibraryTest.java!");
+        }
         assertEquals(testLibrary.getAllQuotes().size(), 2);
         assertTrue(testLibrary.getAllQuotes().contains(quote2));
         testLibrary.removeAllQuotes();
@@ -78,7 +99,11 @@ class LibraryTest {
 
     @Test
     public void testEditQuote() {
-        testLibrary.addQuote(quote1);
+        try {
+            testLibrary.addQuote(quote1);
+        } catch (DuplicateException e) {
+            System.out.println("Duplicate exception caught in LibraryTest.java!");
+        }
         quote1.setPhrase("Test");
         quote1.setAuthor("Test");
 //        testLibrary.editQuote(quote1);

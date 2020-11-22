@@ -1,5 +1,6 @@
 package persistence;
 
+import exceptions.DuplicateException;
 import model.Quote;
 import model.Library;
 
@@ -47,8 +48,12 @@ class JsonWriterTest extends JsonTest {
     void testJsonWriterSomeQuotes() {
         try {
             Library library = new Library();
-            library.addQuote(new Quote("Quote 1", "Author 1"));
-            library.addQuote(new Quote("Quote 2", "Author 2"));
+            try {
+                library.addQuote(new Quote("Quote 1", "Author 1"));
+                library.addQuote(new Quote("Quote 2", "Author 2"));
+            } catch (DuplicateException e) {
+                System.out.println("Duplicate exception caught in JsonWriterTest.java!");
+            }
             JsonWriter writer = new JsonWriter("./data/testJsonWriterSomeQuotes.json");
             writer.open();
             writer.write(library);

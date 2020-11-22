@@ -3,6 +3,8 @@ package model;
 import org.json.JSONObject;
 import persistence.Writable;
 
+import java.util.Objects;
+
 // import java.util.TreeSet;
 
 // Represents a quote having an ID, phrase, author (optional), and tag(s)
@@ -58,5 +60,18 @@ public class Quote implements Writable {
         json.put("phrase", this.phrase);
         json.put("author", this.author);
         return json;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Quote quote = (Quote) o;
+        return phrase.equals(quote.phrase);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(phrase);
     }
 }
