@@ -1,7 +1,6 @@
 package persistence;
 
 import exceptions.DuplicateException;
-import exceptions.EmptyException;
 import model.Quote;
 import model.Library;
 
@@ -52,8 +51,6 @@ class JsonWriterTest extends JsonTest {
             try {
                 library.addQuote(new Quote("Quote 1", "Author 1"));
                 library.addQuote(new Quote("Quote 2", "Author 2"));
-            } catch (EmptyException e) {
-                System.out.println("Empty exception caught in JsonWriterTest.java!");
             } catch (DuplicateException e) {
                 System.out.println("Duplicate exception caught in JsonWriterTest.java!");
             }

@@ -4,7 +4,6 @@ package ui;
 import exceptions.DuplicateException;
 import java.io.IOException;
 
-import exceptions.EmptyException;
 import model.Library;
 import model.Quote;
 import persistence.JsonReader;
@@ -83,8 +82,6 @@ public class QuoteLibrary {
             checkDuplicate(newQuote);
             library.addQuote(newQuote);
             saveLibrary();
-        } catch (EmptyException e) {
-            out.println("Sorry! The \"Quote\" field cannot be empty.");
         } catch (DuplicateException e) {
             out.println("Sorry! That quote already exists.");
         }

@@ -1,7 +1,6 @@
 package model;
 
 import exceptions.DuplicateException;
-import exceptions.EmptyException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,8 +30,6 @@ class LibraryTest {
         checkLibraryEmptyDoesntContain(quote1);
         try {
             testLibrary.addQuote(quote1);
-        } catch (EmptyException e) {
-            System.out.println("Empty exception caught in LibraryTest.java!");
         } catch (DuplicateException e) {
             System.out.println("Duplicate exception caught in LibraryTest.java!");
         }
@@ -60,8 +57,6 @@ class LibraryTest {
             newQuote = new Quote(randomPhrase, randomAuthor);
             try {
                 testLibrary.addQuote(newQuote);
-            } catch (EmptyException e) {
-                System.out.println("Empty exception caught in LibraryTest.java!");
             } catch (DuplicateException e) {
                 System.out.println("Duplicate exception caught in LibraryTest.java!");
             }
@@ -74,8 +69,6 @@ class LibraryTest {
     public void testRemoveQuote() {
         try {
             testLibrary.addQuote(quote1);
-        } catch (EmptyException e) {
-            System.out.println("Empty exception caught in LibraryTest.java!");
         } catch (DuplicateException e) {
             System.out.println("Duplicate exception caught in LibraryTest.java!");
         }
@@ -88,16 +81,12 @@ class LibraryTest {
     public void testRemoveAllQuotes() {
         try {
             testLibrary.addQuote(quote1);
-        } catch (EmptyException e) {
-            System.out.println("Empty exception caught in LibraryTest.java!");
         } catch (DuplicateException e) {
             System.out.println("Duplicate exception caught in LibraryTest.java!");
         }
         checkLibraryContainsOnce(quote1);
         try {
             testLibrary.addQuote(quote2);
-        } catch (EmptyException e) {
-            System.out.println("Empty exception caught in LibraryTest.java!");
         } catch (DuplicateException e) {
             System.out.println("Duplicate exception caught in LibraryTest.java!");
         }
@@ -112,8 +101,6 @@ class LibraryTest {
     public void testEditQuote() {
         try {
             testLibrary.addQuote(quote1);
-        } catch (EmptyException e) {
-            System.out.println("Empty exception caught in LibraryTest.java!");
         } catch (DuplicateException e) {
             System.out.println("Duplicate exception caught in LibraryTest.java!");
         }
