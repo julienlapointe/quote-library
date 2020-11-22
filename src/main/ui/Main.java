@@ -16,7 +16,7 @@
 
 package ui;
 
-import static ui.Frame.getGUI;
+import static ui.Swing.getGUI;
 
 // Represents an instance of the QuoteLibrary app
 public class Main {
