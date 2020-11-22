@@ -13,16 +13,20 @@ class LibraryTest {
     private Library testLibrary;
     private Quote quote1;
     private Quote quote2;
+    private Quote quote3;
     private String phrase1 = "Phrase 1";
     private String author1 = "Author 1";
     private String phrase2 = "Phrase 2";
     private String author2 = "Author 2";
+    private String phrase3 = "";
+    private String author3 = "Empty Quote";
 
     @BeforeEach
     void setup() {
         testLibrary = new Library();
         quote1 = new Quote(phrase1, author1);
         quote2 = new Quote(phrase2, author2);
+        quote3 = new Quote(phrase3, author3);
     }
 
     // Source: IntegerSet example
@@ -33,21 +37,53 @@ class LibraryTest {
             testLibrary.addQuote(quote1);
         } catch (EmptyException e) {
             System.out.println("Empty exception caught in LibraryTest.java!");
+            fail("I was not expecting EmptyException!");
+        } catch (DuplicateException e) {
+            System.out.println("Duplicate exception caught in LibraryTest.java!");
+            fail("I was not expecting DuplicateException!");
+        }
+        checkLibraryContainsOnce(quote1);
+    }
+
+    // Test adding duplicate quotes
+    @Test
+    public void testAddQuoteDuplicate() {
+        checkLibraryEmptyDoesntContain(quote1);
+        try {
+            testLibrary.addQuote(quote1);
+        } catch (EmptyException e) {
+            System.out.println("Empty exception caught in LibraryTest.java!");
+            fail("I was not expecting EmptyException!");
+        } catch (DuplicateException e) {
+            System.out.println("Duplicate exception caught in LibraryTest.java!");
+            fail("I was not expecting DuplicateException!");
+        }
+        checkLibraryContainsOnce(quote1);
+        try {
+            testLibrary.addQuote(quote1);
+            fail("I was not expecting to reach this line!");
+        } catch (EmptyException e) {
+            System.out.println("Empty exception caught in LibraryTest.java!");
         } catch (DuplicateException e) {
             System.out.println("Duplicate exception caught in LibraryTest.java!");
         }
         checkLibraryContainsOnce(quote1);
     }
 
-    // Test adding duplicate quotes
-//    @Test
-//    public void testAddQuoteDuplicate() {
-//        checkLibraryEmptyDoesntContain(quote1);
-//        testLibrary.addQuote(quote1);
-//        checkLibraryContainsOnce(quote1);
-//        testLibrary.addQuote(quote1);
-//        checkLibraryContainsOnce(quote1);
-//    }
+    // Test adding empty quote
+    @Test
+    public void testAddQuoteEmpty() {
+        checkLibraryEmptyDoesntContain(quote3);
+        try {
+            testLibrary.addQuote(quote3);
+            fail("I was not expecting to reach this line!");
+        } catch (EmptyException e) {
+            System.out.println("Empty exception caught in LibraryTest.java!");
+        } catch (DuplicateException e) {
+            System.out.println("Duplicate exception caught in LibraryTest.java!");
+        }
+        checkLibraryEmptyDoesntContain(quote3);
+    }
 
     @Test
     public void testAddQuoteHighVolume() {
