@@ -27,7 +27,15 @@ library.
 - As a user, I want to be able to **save** all my quotes to a file.
 - As a user, I want to be able to **load** all my quotes from a file.
 
-Citations
+### Phase 4, Task 2
+
+-
+
+### Phase 4, Task 3
+
+- 
+
+### Citations
 - Persistence code based on https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo.git
 - Swing code based on https://www.lynda.com/Java-tutorials/Learn-Java-Swing/592496-2.html 
 (Lynda.com's Learn Java with Swing course)

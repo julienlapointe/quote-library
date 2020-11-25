@@ -25,8 +25,8 @@ import javax.swing.event.ListSelectionListener;
 import static java.lang.System.out;
 
 // Represents the Swing UI
-public class Swing extends JPanel
-                   implements ListSelectionListener {
+public class GUI extends JPanel
+                 implements ListSelectionListener {
 
     // Model Fields
     Library library;
@@ -72,7 +72,7 @@ public class Swing extends JPanel
     // Constructor
     // EFFECTS: Library, JsonWriter, JsonReader, and DefaultListModel are initialized;
     //          button panels are added to Swing UI using BorderLayout
-    public Swing() {
+    public GUI() {
         super(new BorderLayout());
 
         // Initialize model object (a Library of Quotes)
@@ -645,7 +645,7 @@ public class Swing extends JPanel
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Create and set up the content pane
-        JComponent contentPane = new Swing();
+        JComponent contentPane = new GUI();
         contentPane.setOpaque(true); //content panes must be opaque
         frame.setContentPane(contentPane);
 
