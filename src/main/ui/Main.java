@@ -24,12 +24,13 @@
 // - Add empty author ("Anonymous") feature to Edit dialog
 // - Fix textField focus issue after a DuplicateException / EmptyException
 // - Pop-up dialog with error message for DuplicateException / EmptyException
-// - Add drag-and-drop functionality to list (must update the model;
-//   see "SwingJListDragAndDrop" projects)
+// - Add drag-and-drop functionality to list (must update the model; see "SwingJListDragAndDrop" projects)
 // - Add "Quote Show" carousel visual display of quotes (random order)
-// - Add tags to Quotes using HashMap
+// - Add tags to Quotes using HashMap (HashSet so no duplicates; key = tag (String); value = array of quoteIds;
+//   in the Quotes class, tags = array of Strings
 // - Filter quotes by tag
 // - Search
+// - Move "Add" button to bottom panel and "Save / Load" buttons to top panel with Search / Filter?
 // - Refactor GUI.java to (1) have a sound() helper method and (2) put each of the five
 //   event listeners / handlers into their own files
 // - Comments / Credits
