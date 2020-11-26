@@ -38,6 +38,13 @@ testAddQuoteDuplicate(), testAddQuoteEmpty, testAddQuoteHighVolume, and testEdit
 
 ### Phase 4, Task 3
 
+![UML Class Diagram](https://github.students.cs.ubc.ca/CPSC210-2020W-T1/project_d4a5d/blob/master/UML_Design_Diagram.png?raw=true)
+
+Given more time, I would refactor the GUI class. It is currently 700 lines long. I would 
+break the five event listener / handler classes into their own files. Additionally, there is 
+duplicate code among the seven methods that produce sound in the GUI class. I would create a
+single helper method for producing sound. 
+
 ### Citations
 - Persistence code based on https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo.git
 - Swing code based on https://www.lynda.com/Java-tutorials/Learn-Java-Swing/592496-2.html 
