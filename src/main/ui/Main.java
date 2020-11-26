@@ -24,7 +24,8 @@
 // - Add empty author ("Anonymous") feature to Edit dialog
 // - Fix textField focus issue after a DuplicateException / EmptyException
 // - Pop-up dialog with error message for DuplicateException / EmptyException
-// - Add drag-and-drop functionality to list (must update the model)
+// - Add drag-and-drop functionality to list (must update the model;
+//   see "SwingJListDragAndDrop" projects)
 // - Add "Quote Show" carousel visual display of quotes (random order)
 // - Add tags to Quotes using HashMap
 // - Filter quotes by tag
