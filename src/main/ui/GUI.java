@@ -288,11 +288,11 @@ public class GUI extends JPanel
             Quote newQuote = new Quote(phrase, author);
             try {
                 library.addQuote(newQuote);
-            } catch (EmptyException e) {
+            } catch (EmptyException exception) {
                 playBeepSound();
                 out.println("BEEP! Sorry, the \"Quote\" text field cannot be empty.");
                 return;
-            } catch (DuplicateException e) {
+            } catch (DuplicateException exception) {
                 playBeepSound();
                 out.println("BEEP! Sorry, that quote is already in the library.");
                 return;
@@ -363,11 +363,6 @@ public class GUI extends JPanel
             } catch (LineUnavailableException exception) {
                 exception.printStackTrace();
             }
-        }
-
-        // EFFECTS: If listModel already contains the quote, then return true; otherwise, return false
-        protected boolean alreadyInList(String quote) {
-            return listModel.contains(quote);
         }
 
         // Required by DocumentListener
