@@ -38,8 +38,6 @@ testAddQuoteDuplicate(), testAddQuoteEmpty, testAddQuoteHighVolume, and testEdit
 
 ### Phase 4, Task 3
 
-- 
-
 ### Citations
 - Persistence code based on https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo.git
 - Swing code based on https://www.lynda.com/Java-tutorials/Learn-Java-Swing/592496-2.html 
