@@ -27,16 +27,7 @@ library.
 - As a user, I want to be able to **save** all my quotes to a file.
 - As a user, I want to be able to **load** all my quotes from a file.
 
-### Phase 4, Task 2
-
-- Option: Test and design a robust class in the model package that throws at least one
-checked exception.
-- See the robust Library class with the addQuote() and editQuote() methods that throw 
-EmptyException and DuplicateException through the validateQuote(Quote) helper method.
-- See the LibraryTest suite, specifically the following unit tests: testAddQuote(), 
-testAddQuoteDuplicate(), testAddQuoteEmpty, testAddQuoteHighVolume, and testEditQuote().
-
-### Phase 4, Task 3
+### UML Class Diagram
 
 ![UML Class Diagram](https://github.com/julienlapointe/quote-library/blob/master/UML_Design_Diagram.png?raw=true)
 
