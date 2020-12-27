@@ -38,7 +38,7 @@ testAddQuoteDuplicate(), testAddQuoteEmpty, testAddQuoteHighVolume, and testEdit
 
 ### Phase 4, Task 3
 
-![UML Class Diagram](https://github.students.cs.ubc.ca/CPSC210-2020W-T1/project_d4a5d/blob/master/UML_Design_Diagram.png?raw=true)
+![UML Class Diagram](https://github.com/julienlapointe/quote-library/blob/master/UML_Design_Diagram.png?raw=true)
 
 Given more time, I would refactor the GUI class. It is currently 700 lines long. I would 
 break the five event listener / handler classes into their own files. Additionally, there is 
